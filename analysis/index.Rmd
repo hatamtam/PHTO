@@ -1,0 +1,14 @@
+---
+title: "Home"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+
+Welcome to my research website! This is where my R code will be
+
+### PHTO RNA-seq analysis pipeline
+[PHTO RNA-seq analyses](https://hatamtam.github.io/PHTO/first-analysis.html)
