@@ -1,0 +1,526 @@
+---
+title: "PHTO_RNAseq_Quality_analysis"
+author: "Harsha Tamtam"
+date: "`r Sys.Date()`"
+output: html_document
+---
+```{r setup, include=FALSE}
+#this chuck is to setup defaults for basic settings of the webpage, note that this chunk is R language and the chunk below is CSS language
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	dev = c("png","pdf")
+)
+```
+
+```{css, echo=FALSE}
+pre {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+pre[class] {
+  max-height: 200px;
+}
+```
+
+
+## Introduction
+
+## PHTO Data
+
+## Library Section
+```{r Libraries}
+library(tidyverse)
+library(dplyr)
+library(tibble)
+library(scales)
+library(cowplot)
+library(edgeR)
+library(smplot2)
+library(ggpubr)
+library(workflowr)
+library(ComplexHeatmap)
+library(RColorBrewer)
+library(gridExtra)
+library(ggrepel)
+library(ggVennDiagram)
+library(grid)
+library(ggrepel)
+library(org.Hs.eg.db)
+library(enrichplot)
+library(clusterProfiler)
+library(circlize)
+library(gprofiler2)
+library(stringr)
+library(readr)
+library(GO.db)
+library(AnnotationDbi)
+```
+
+
+### File cleaning
+```{r}
+Emma_metadata <- readRDS("data/Emma_metadata_updated_all.RDS")
+Emma_counts <- read.csv("data/Emma_counts_file.csv")
+
+stimulus_cleaned_metadata <- Emma_metadata %>%
+  dplyr::filter(!Stimulus %in% c("EtOH", "PFOA", "BPA"))
+
+cleaned_metadata_24hr <- stimulus_cleaned_metadata %>%
+  dplyr::filter(Time == 24)
+
+cleaned_counts <- Emma_counts %>% 
+  as.data.frame() %>% 
+  rename(., Ensembl = gene_id) %>% 
+  pivot_longer(-Ensembl, names_to = "Samples", values_to = "raw_counts") %>% 
+  left_join(cleaned_metadata_24hr, by = c("Samples" = "Sample_ID")) %>% 
+  dplyr::select(Ensembl, raw_counts, Final_sample_name) %>% 
+  pivot_wider(names_from = Final_sample_name, values_from = raw_counts) %>% 
+  column_to_rownames("Ensembl") %>% 
+  dplyr::select(-`NA`)
+
+```
+
+###Emma's sample data distribution
+```{r, fig.width=12, fig.height=5}
+count_df <- cleaned_counts %>%
+  mutate(across(everything(), as.numeric)) %>%
+  as.data.frame() %>% 
+  rownames_to_column("genes") %>% 
+  pivot_longer(-genes, names_to = "Samples", values_to = "count_distributions") %>% 
+  mutate(count_distributions = as.numeric(count_distributions))
+  
+ggplot(count_df, aes(x= Samples, y=count_distributions))+
+  geom_boxplot()+
+  labs(title = "Individual Count Distributions", y="RNA Count Distributions")+
+  theme_bw()+
+  theme(plot.title = element_text(size = rel(2), hjust = 0.5),
+        axis.title = element_text(size = 15, color = "black"),
+        axis.ticks = element_line(linewidth = 1.5),
+        axis.text.y = element_text(size =10, color = "black", angle = 0, hjust = 0.8, vjust = 0.5),
+        axis.text.x = element_text(size =10, color = "black", angle = 90, hjust = 1, vjust = 0.2),
+        strip.text.y = element_text(color = "white"))
+
+ggplot(count_df, aes(x = Samples, y = count_distributions+0.000000000000001)) +
+  geom_boxplot()+
+  scale_y_log10()+
+  labs(title = "Individual Count Distributions",y="RNA Count Distributions")+
+  theme_bw()+
+  theme(plot.title = element_text(size = rel(2), hjust = 0.5),
+        axis.title = element_text(size = 15, color = "black"),
+        axis.ticks = element_line(linewidth = 1.5),
+        axis.text.y = element_text(size =10, color = "black", angle = 0, hjust = 0.8, vjust = 0.5),
+        axis.text.x = element_text(size =10, color = "black", angle = 90, hjust = 1, vjust = 0.2),
+        strip.text.y = element_text(color = "white"))
+```
+
+### Converting raw counts to raw log2cpm
+```{r}
+
+count_matrix <- cleaned_counts %>%
+  mutate(across(everything(), as.numeric)) %>%
+  as.matrix()
+
+log2_cpm <- cpm(count_matrix, log = TRUE) %>% 
+  as.data.frame() %>% 
+  rownames_to_column("genes") %>%
+  as_tibble()
+
+```
+
+### Filtering log2cpm counts
+```{r}
+gene_means <- log2_cpm %>% 
+  column_to_rownames(var = "genes") %>% 
+  rowMeans()
+
+PHTO_filtered_counts <- count_matrix[gene_means > 0, ]
+
+PHTO_filtered_log2_cpm <- cpm(PHTO_filtered_counts, log = TRUE)
+
+# saveRDS(PHTO_filtered_log2_cpm,"data/PHTO_filtered_log2_cpm.RDS")
+
+  # this code output the number of rows, i.e: the number of genes where log2 > 0
+nrow(log2_cpm)  
+nrow(PHTO_filtered_log2_cpm)
+  # this code outputs the difference between rows of the df log2_cpm, unfiltered from the rows of the df PHTO_filtered_log2_cpm, which is the number of genes that were removed from filtering, as in the number of genes removed where log2 cpm < 0
+nrow(log2_cpm) - nrow(PHTO_filtered_log2_cpm)
+
+# Before filtering
+  before_tbl <- log2_cpm %>%
+  as.data.frame() %>%
+  pivot_longer(-genes, names_to = "Samples", values_to = "log2cpm") %>%
+  mutate(Filter = "Before")
+
+# After filtering
+  after_tbl <- PHTO_filtered_log2_cpm %>%
+  as.data.frame() %>%
+  rownames_to_column(var = "genes") %>% 
+  pivot_longer(-genes, names_to = "Samples", values_to = "log2cpm") %>%
+  mutate(Filter = "After")
+
+# This combines the before and after tables to visualize the original and filtered cpm frequency values 
+combined_tbl <- bind_rows(before_tbl, after_tbl)
+
+# This code creates a histogram cpm distribution **before filtering**
+ggplot(before_tbl, aes(x = log2cpm, fill = )) +
+  geom_histogram(bins = 50, alpha = 0.3, position = ("identity")) +
+  theme_bw() +
+  labs(title = "Log2 CPM Distributions", x = "log2 CPM", y = "Frequencies before filtering")
+
+# This code creates a histogram cpm distribution **after filtering**
+ggplot(after_tbl, aes(x = log2cpm, fill = )) +
+  geom_histogram(bins = 50, alpha = 0.3, position = ("identity")) +
+  theme_bw() +
+  labs(title = "Log2 CPM Distributions", x = "log2 CPM", y = "Frequencies after filtering")
+
+# This code creates a histogram cpm distribution data before and after filtering
+ggplot(combined_tbl, aes(x = log2cpm, fill = Filter)) +
+  geom_histogram(bins = 50, alpha = 0.5, position = ("identity")) +
+    scale_fill_manual(
+    values = c(
+      "Before" = "lightblue",
+      "After" = "darkred")
+    ) +
+  theme_bw() +
+  labs(title = "Log2 CPM Distributions", x = "log2 CPM", y = "Frequency")
+
+# This code creates box plots cpm distribution data before and after filtering
+reordered_combined_tbl <- combined_tbl %>%
+  mutate(Filter = factor(Filter, levels = c("Before", "After"))) 
+
+ggplot(reordered_combined_tbl, aes(x = Filter, y = log2cpm, fill = Filter)) +
+  geom_boxplot(outlier.shape = NA) +
+  theme_bw() +
+  labs(title = "Log2 CPM Boxplots",y = "log2 CPM")
+
+```
+
+
+### Observing how samples compare with one another
+
+```{r Scatter plot to compare sample similarities under species and treatment categories}
+scatter_function <- function(log2_filtered_df, sample_name){
+  
+after_filter_with_metadata <- log2_filtered_df %>%
+  left_join(cleaned_metadata_24hr, by = c("Samples" = "Final_sample_name")) %>%  
+  dplyr::select(genes, log2cpm, Samples) %>% 
+  dplyr::filter(Samples %in% c("H2O_24_C2", sample_name))
+
+wide_scatter <- after_filter_with_metadata %>%
+  pivot_wider(names_from = Samples, values_from = log2cpm) %>% 
+  ggplot(., aes(x = H2O_24_C2, y = .data[[sample_name]])) +
+  geom_point() +
+  stat_cor(method = "pearson") +
+  theme_classic()
+}
+```
+
+
+```{r This code calls the scatter_function from above and applies a list that I have provided below, fig.height=5, fig.width=7}
+lapply(X = c("H2O_24_C1", "DMSO_24_C2", "TUN_24_C2", "THA_24_C2", "DOX_24_C2", "NUTL_24_C2", "LPS_24_C2", "TNFa_24_C2", "H2O_24_H2"), FUN = function(x) {scatter_function(after_tbl, x)})
+```
+
+
+### Heatmap of spearman correlations
+```{r, fig.width=13, fig.height=11}
+spearman_df <- after_tbl %>% 
+  left_join(cleaned_metadata_24hr, by = c("Samples" = "Final_sample_name")) %>% 
+  select(genes, log2cpm, Samples) %>%
+  pivot_wider(names_from = Samples, values_from = log2cpm) %>% 
+  column_to_rownames(var = "genes")
+
+# saveRDS(spearman_df,"data/Ensembl_Condition_filtered_log2cpm_counts_df.RDS")
+
+#head(spearman_df)
+
+attribute_labels_df <- cleaned_metadata_24hr %>%
+   select(Sex, Species, Ind, Stimulus, Final_sample_name) %>%
+   column_to_rownames(var = "Final_sample_name") %>% 
+   as.tibble()
+#head(attribute_labels_df)
+ 
+ spearman_cor <- cor(
+   spearman_df,
+   method = "spearman"
+ )
+ 
+ individual_colors <- structure(
+   # brewer.pal(12, "Set3"), ## I would use this line of code if I had 12 unique Individuals. However, I have 14, so I need to use the one below to generate colors outside of the main 12 colors in the brwer.pal structure
+   colorRampPalette(brewer.pal(12, "Set3"))(14),
+   names = unique(attribute_labels_df$Ind)
+ )
+ 
+ stimulus_colors <- structure(
+   brewer.pal(8, "Accent"),
+   names = unique(attribute_labels_df$Stimulus)
+ )
+ 
+ heatmap_anno <- HeatmapAnnotation(
+   Species = attribute_labels_df$Species,
+   Sex = attribute_labels_df$Sex,
+   Stimulus = attribute_labels_df$Stimulus,
+   Individual = attribute_labels_df$Ind,
+   col = list(
+     Species = c(
+       C = "#F1B72B",
+       H = "#8B006D"
+        ),
+     Sex = c(
+       M = "#3C042F",
+       F = "#DF707E"
+        ),
+     Stimulus = stimulus_colors
+     ,
+     Individual = individual_colors
+     ),
+   annotation_name_gp = grid::gpar(
+    fontsize = 8,
+    fontface = "bold"
+  )
+)
+ 
+ Heatmap(
+   spearman_cor,
+   name = "Correlation Gradient",
+   width = unit(24, "cm"),
+   height = unit(20, "cm"),
+   row_names_gp = gpar(fontsize = 6),
+   column_names_gp = gpar(fontsize = 6), 
+   top_annotation = heatmap_anno
+ )
+
+```
+
+
+### Scree plot
+```{r}
+pca_df <- t(spearman_df)
+pca_plotting <- prcomp(pca_df,
+                       center = TRUE,
+                       scale. = FALSE,
+                       retx = TRUE
+                     )
+
+
+pca_df <- as.data.frame(pca_plotting$x)
+
+head(pca_df)
+
+pca_variance <- (
+  pca_plotting$sdev^2 /
+  sum(pca_plotting$sdev^2)
+  )*100
+
+pca_analysis <- data.frame(
+  Component = 1:length(pca_plotting$sdev),
+  Variance = pca_variance
+)
+
+head(pca_analysis)
+
+pca_analysis$Samples <- rownames(pca_df)
+
+pca_anno <- pca_df %>%
+  rownames_to_column("Samples") %>% 
+  left_join(cleaned_metadata_24hr,
+    by = c("Samples" = "Final_sample_name")
+    )
+
+head(pca_anno)
+
+ggplot(pca_analysis, aes(x = Component , y = Variance)) +
+  geom_bar(stat = "identity", fill = "maroon") +
+  geom_line() +
+  geom_point() +
+  xlab("Principal Components") +
+  ylab("Proportion of Variances") +
+  ggtitle(" Analysis of Components Contributing to Variance") +
+  theme_bw()
+
+```
+
+
+### Observations on which factors have the most significant effects on principal component variances
+
+```{r This chunk of code is my attempt to make a function that will plot the PCA plots I am interested with in one go}
+
+pca_plot_new <- function(df, pc_x = 1, pc_y = 2, col_var, shape_var, pca_plotting, title = "") {
+  
+  # variance explained
+  pca_variance <- (pca_plotting$sdev^2 / sum(pca_plotting$sdev^2))*100
+  
+  # axis labels
+  x_lab <- sprintf("PC%d (%.1f%%)", pc_x, pca_variance[pc_x] * 100)
+  y_lab <- sprintf("PC%d (%.1f%%)", pc_y, pca_variance[pc_y] * 100)
+  
+  ggplot(df, aes(x = .data[[paste0("PC", pc_x)]], 
+                 y = .data[[paste0("PC", pc_y)]], 
+                 color = !!sym(col_var), 
+                 shape = !!sym(shape_var))) +
+    geom_point(size = 5) +
+    labs(title = title, x = x_lab, y = y_lab) +
+    scale_color_manual(values = c(
+      "#8B006D","#DF707E","#F1B72B",
+      "#3386DD","#707031","#41B333"
+    ))
+}
+
+pca_plot <-
+  function(pca_df, col_var = NULL, shape_var = NULL, title = "") {
+    ggplot(df) + geom_point(aes(
+      x = PC1,
+      y = PC2,
+      color = col_var,
+      shape = shape_var
+    ),
+    size = 5) +
+      labs(title = title, x = "PC 1", y = "PC 2") +
+      scale_color_manual(values = c(
+        "#8B006D",
+        "#DF707E",
+        "#F1B72B",
+        "#3386DD",
+        "#707031",
+        "#41B333"
+      ))
+  }
+
+get_regr_pval <- function(model) {
+  # Returns the p-value for the F statistic of a linear model
+  # mod: class lm
+  stopifnot(inherits(model, "lm"))
+  fstat <- summary(model)$fstatistic
+  pval <- 1 - pf(fstat[1], fstat[2], fstat[3])
+  return(pval)
+}
+
+plot_versus_pc <- function(pca_anno, pc_num, facs) {
+  # df: data.frame
+  # pc_num: numeric, specific PC for plotting
+  # facs: column name of df for plotting against PC
+  pc_char <- paste0("PC", pc_num)
+  # Calculate F-statistic p-value for linear model
+  
+  form <- as.formula(paste(pc_char, "~", facs))
+  model <- lm(form, data = pca_anno)
+
+  pval <- get_regr_pval(model)
+
+  if (is.numeric(pca_anno[[facs]])) {
+    ggplot(pca_anno, aes_string(x = facs, y = pc_char)) +
+      geom_point() +
+      geom_smooth(method = "lm") +
+      labs(title = sprintf("p-val: %.3g", pval))
+  }
+  else {
+    ggplot(pca_anno, aes_string(x = facs, y = pc_char)) +
+      geom_boxplot() +
+      labs(title = sprintf("p-val: %.3g", pval))
+  }
+}
+
+#The lines of code below ouput the number of unique labels for each attribute I call from the pca_charts data frame 
+# sapply(c("species", "tx", "ind", "sex"), function(x) {
+#   length(unique(na.omit(pca_charts[[x]])))
+# })
+
+```
+
+
+```{r Here I will apply the function about to this current function with a list to plot all PCA variance graphs of interest, fig.height=8, fig.width=7}
+rownames(pca_anno) <- pca_anno$Samples
+
+pca_converted <- pca_anno %>%
+  tidyr::separate(
+    Samples,
+    into = c("stimulus", "time", "individual"),
+    sep = "_"
+  ) %>%
+  mutate(
+    species = case_when(
+      startsWith(individual, "H") ~ "Human",
+      startsWith(individual, "C") ~ "Chimp",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  dplyr::select(
+    species,
+    stimulus,
+    individual,
+    everything()
+  )
+
+pca_charts <- pca_converted %>% 
+  mutate(species=factor(species, levels = c("Chimp", "Human"))) %>% 
+  mutate(stimulus=factor(stimulus, levels = c("H2O", "DMSO", "DOX", "NUTL", "LPS", "TNFa", "TUN", "THA"))) %>% 
+  mutate(sex=factor(Sex, levels=c("F","M")))
+
+facs <- c("species", "sex", "stimulus", "individual")
+names(facs) <- c("Species", "Sex", "Stimulus", "Individual")
+
+plots_of_pcas <- lapply(names(facs), function(f_label) {
+  f <- facs[f_label]
+  f_v_pc1 <- plot_versus_pc(pca_charts, 1, f)
+  f_v_pc2 <- plot_versus_pc(pca_charts, 2, f)
+  f_v_pc3 <- plot_versus_pc(pca_charts, 3, f)
+  f_v_pc4 <- plot_versus_pc(pca_charts, 4, f)
+  f_v_pc5 <- plot_versus_pc(pca_charts, 5, f)
+  f_v_pc6 <- plot_versus_pc(pca_charts, 6, f)
+
+  grid.arrange(f_v_pc1, f_v_pc2, f_v_pc3, f_v_pc4, f_v_pc5, f_v_pc6, ncol = 2, top = paste0(f_label," PCA Analyses"))
+})
+
+```
+
+
+
+
+### PCA plot demonstrating Species/Sex/Individual (PC1) and Treatment (PC2) stratification
+```{r This chunk of code is my attempt at creating PCA plots to illustrate which factors contribute to varience between samples}
+
+stimulus_shape <- scale_shape_manual(
+  values = c("DMSO" = 16,
+             "DOX" = 17,
+             "H2O" = 18,
+             "LPS" = 19,
+             "NUTL" = 20,
+             "THA" = 21,
+             "TNFa" = 22,
+             "TUN" = 23
+             ),
+  name = "Stimuli"
+)
+
+ggplot(
+  pca_converted,
+  aes(
+    x = PC1,
+    y = PC2,
+    color = Species,
+    shape = stimulus
+  )
+) +
+  geom_point(size = 4) +
+  geom_text_repel(
+    aes(label = rownames(pca_converted)), size = 2.5) +
+  stimulus_shape +
+  labs(
+    title = "PCA of RNA-seq Samples",
+    x = paste0(
+      "PC1: ",
+      round(pca_variance[1], 1),
+      "% variance"
+    ),
+    y = paste0(
+      "PC2: ",
+      round(pca_variance[2], 1),
+      "% variance"
+    )
+  ) +
+  theme_classic()
+
+```
+
