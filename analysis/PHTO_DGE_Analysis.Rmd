@@ -1277,7 +1277,11 @@ PHTO_lookup_table <- tibble::tibble(
   dplyr::rename(
     Entrez_ID = ENTREZID,
     Symbol = SYMBOL
-  )
+  ) %>% 
+  mutate(id_label = ifelse(
+    is.na(Symbol),
+    Ensembl,
+    Symbol))
 
 PHTO_ensembl_to_gene_mapping_sucess <- PHTO_lookup_table %>%
   dplyr::summarise(
@@ -1334,15 +1338,14 @@ PHTO_toptable_list <- list(
 generate_volcano_plot <- function(toptable, list_name) {
 
   volcano_colors <- toptable %>%
-    tibble::rownames_to_column("Genes") %>%
+    tibble::rownames_to_column("Gene") %>%
     dplyr::left_join(PHTO_lookup_table %>% 
-                tibble::rownames_to_column("Ensemble") %>% 
-                dplyr::select(Ensemble, Symbol),
-              by = c("Genes" = "Ensemble")) %>% 
+                dplyr::select(Ensembl, Symbol),
+              by = c("Gene" = "Ensembl")) %>% 
     dplyr::mutate(
     id_label = ifelse(
       is.na(Symbol),
-      Genes,
+      Gene,
       Symbol
     )
   ) %>% 
