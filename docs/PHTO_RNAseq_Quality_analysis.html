@@ -11,7 +11,7 @@
 
 <meta name="author" content="Harsha Tamtam" />
 
-<meta name="date" content="2026-08-12" />
+<meta name="date" content="2026-09-25" />
 
 <title>PHTO_RNAseq_Quality_analysis</title>
 
@@ -353,7 +353,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">PHTO_RNAseq_Quality_analysis</h1>
 <h4 class="author">Harsha Tamtam</h4>
-<h4 class="date">2026-08-12</h4>
+<h4 class="date">2026-09-25</h4>
 
 </div>
 
@@ -382,7 +382,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-08-12
+<strong>Last updated:</strong> 2026-09-25
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -513,15 +513,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree4c468427d9968c97761d223fab19946b3da91221targetblank4c46842a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree1539325cca60b65c4c22a974a22b97fee2155af9targetblank1539325a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/hatamtam/PHTO/tree/4c468427d9968c97761d223fab19946b3da91221" target="_blank">4c46842</a>
+<a href="https://github.com/hatamtam/PHTO/tree/1539325cca60b65c4c22a974a22b97fee2155af9" target="_blank">1539325</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree4c468427d9968c97761d223fab19946b3da91221targetblank4c46842a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree1539325cca60b65c4c22a974a22b97fee2155af9targetblank1539325a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -531,7 +531,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/hatamtam/PHTO/tree/4c468427d9968c97761d223fab19946b3da91221" target="_blank">4c46842</a>.
+<a href="https://github.com/hatamtam/PHTO/tree/1539325cca60b65c4c22a974a22b97fee2155af9" target="_blank">1539325</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -550,9 +550,14 @@ Ignored files:
     Ignored:    .Rproj.user/
 
 Untracked files:
+    Untracked:  analysis/PHTO_DGE_Analysis.Rmd
     Untracked:  data/Emma_counts_file.csv
     Untracked:  data/Emma_metadata_updated_all.RDS
+    Untracked:  data/Ensembl_Entrez_Symbol_table.RDS
     Untracked:  data/PHTO_filtered_log2_cpm.RDS
+    Untracked:  data/PHTO_lookup_table.RDS
+    Untracked:  data/PHTO_toptable_results.RDS
+    Untracked:  data/dge_list.RDS
 
 Unstaged changes:
     Deleted:    analysis/first-analysis.Rmd
@@ -601,6 +606,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/1539325cca60b65c4c22a974a22b97fee2155af9/analysis/PHTO_RNAseq_Quality_analysis.Rmd" target="_blank">1539325</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+<td>
+wflow_publish("analysis/PHTO_RNAseq_Quality_analysis.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/hatamtam/PHTO/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/PHTO_RNAseq_Quality_analysis.html" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -707,6 +746,43 @@ ggplot(count_df, aes(x= Samples, y=count_distributions))+
         axis.text.x = element_text(size =10, color = &quot;black&quot;, angle = 90, hjust = 1, vjust = 0.2),
         strip.text.y = element_text(color = &quot;white&quot;))</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-3-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-3-1.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(count_df, aes(x = Samples, y = count_distributions+0.000000000000001)) +
   geom_boxplot()+
   scale_y_log10()+
@@ -719,6 +795,43 @@ ggplot(count_df, aes(x= Samples, y=count_distributions))+
         axis.text.x = element_text(size =10, color = &quot;black&quot;, angle = 90, hjust = 1, vjust = 0.2),
         strip.text.y = element_text(color = &quot;white&quot;))</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-3-2.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
+Past versions of unnamed-chunk-3-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-3-2.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="converting-raw-counts-to-raw-log2cpm" class="section level3">
 <h3>Converting raw counts to raw log2cpm</h3>
@@ -773,12 +886,86 @@ ggplot(before_tbl, aes(x = log2cpm, fill = )) +
   theme_bw() +
   labs(title = &quot;Log2 CPM Distributions&quot;, x = &quot;log2 CPM&quot;, y = &quot;Frequencies before filtering&quot;)</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-5-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-5-1.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># This code creates a histogram cpm distribution **after filtering**
 ggplot(after_tbl, aes(x = log2cpm, fill = )) +
   geom_histogram(bins = 50, alpha = 0.3, position = (&quot;identity&quot;)) +
   theme_bw() +
   labs(title = &quot;Log2 CPM Distributions&quot;, x = &quot;log2 CPM&quot;, y = &quot;Frequencies after filtering&quot;)</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-5-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-2">
+Past versions of unnamed-chunk-5-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-5-2.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># This code creates a histogram cpm distribution data before and after filtering
 ggplot(combined_tbl, aes(x = log2cpm, fill = Filter)) +
   geom_histogram(bins = 50, alpha = 0.5, position = (&quot;identity&quot;)) +
@@ -790,6 +977,43 @@ ggplot(combined_tbl, aes(x = log2cpm, fill = Filter)) +
   theme_bw() +
   labs(title = &quot;Log2 CPM Distributions&quot;, x = &quot;log2 CPM&quot;, y = &quot;Frequency&quot;)</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-5-3.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-3">
+Past versions of unnamed-chunk-5-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-5-3.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># This code creates box plots cpm distribution data before and after filtering
 reordered_combined_tbl &lt;- combined_tbl %&gt;%
   mutate(Filter = factor(Filter, levels = c(&quot;Before&quot;, &quot;After&quot;))) 
@@ -799,6 +1023,43 @@ ggplot(reordered_combined_tbl, aes(x = Filter, y = log2cpm, fill = Filter)) +
   theme_bw() +
   labs(title = &quot;Log2 CPM Boxplots&quot;,y = &quot;log2 CPM&quot;)</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-5-4.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-4">
+Past versions of unnamed-chunk-5-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-5-4.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="observing-how-samples-compare-with-one-another"
 class="section level3">
@@ -820,30 +1081,390 @@ wide_scatter &lt;- after_filter_with_metadata %&gt;%
 <pre class="r"><code>lapply(X = c(&quot;H2O_24_C1&quot;, &quot;DMSO_24_C2&quot;, &quot;TUN_24_C2&quot;, &quot;THA_24_C2&quot;, &quot;DOX_24_C2&quot;, &quot;NUTL_24_C2&quot;, &quot;LPS_24_C2&quot;, &quot;TNFa_24_C2&quot;, &quot;H2O_24_H2&quot;), FUN = function(x) {scatter_function(after_tbl, x)})</code></pre>
 <pre><code>[[1]]</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/This%20code%20calls%20the%20scatter_function%20from%20above%20and%20applies%20a%20list%20that%20I%20have%20provided%20below-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-1">
+Past versions of "This code calls the scatter_function from above and
+applies a list that I have provided below-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/This code calls the scatter_function from above and applies a list that I have provided below-1.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 [[2]]</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/This%20code%20calls%20the%20scatter_function%20from%20above%20and%20applies%20a%20list%20that%20I%20have%20provided%20below-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-2">
+Past versions of "This code calls the scatter_function from above and
+applies a list that I have provided below-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/This code calls the scatter_function from above and applies a list that I have provided below-2.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 [[3]]</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/This%20code%20calls%20the%20scatter_function%20from%20above%20and%20applies%20a%20list%20that%20I%20have%20provided%20below-3.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-3">
+Past versions of "This code calls the scatter_function from above and
+applies a list that I have provided below-3.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/This code calls the scatter_function from above and applies a list that I have provided below-3.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 [[4]]</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/This%20code%20calls%20the%20scatter_function%20from%20above%20and%20applies%20a%20list%20that%20I%20have%20provided%20below-4.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-4">
+Past versions of "This code calls the scatter_function from above and
+applies a list that I have provided below-4.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-4"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/This code calls the scatter_function from above and applies a list that I have provided below-4.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 [[5]]</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/This%20code%20calls%20the%20scatter_function%20from%20above%20and%20applies%20a%20list%20that%20I%20have%20provided%20below-5.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-5">
+Past versions of "This code calls the scatter_function from above and
+applies a list that I have provided below-5.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-5"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/This code calls the scatter_function from above and applies a list that I have provided below-5.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 [[6]]</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/This%20code%20calls%20the%20scatter_function%20from%20above%20and%20applies%20a%20list%20that%20I%20have%20provided%20below-6.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-6">
+Past versions of "This code calls the scatter_function from above and
+applies a list that I have provided below-6.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-6"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/This code calls the scatter_function from above and applies a list that I have provided below-6.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 [[7]]</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/This%20code%20calls%20the%20scatter_function%20from%20above%20and%20applies%20a%20list%20that%20I%20have%20provided%20below-7.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-7">
+Past versions of "This code calls the scatter_function from above and
+applies a list that I have provided below-7.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-7"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/This code calls the scatter_function from above and applies a list that I have provided below-7.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 [[8]]</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/This%20code%20calls%20the%20scatter_function%20from%20above%20and%20applies%20a%20list%20that%20I%20have%20provided%20below-8.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-8">
+Past versions of "This code calls the scatter_function from above and
+applies a list that I have provided below-8.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-8"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/This code calls the scatter_function from above and applies a list that I have provided below-8.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 [[9]]</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/This%20code%20calls%20the%20scatter_function%20from%20above%20and%20applies%20a%20list%20that%20I%20have%20provided%20below-9.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-9">
+Past versions of "This code calls the scatter_function from above and
+applies a list that I have provided below-9.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-This-code-calls-the-scatter_function-from-above-and-applies-a-list-that-I-have-provided-below-9"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/This code calls the scatter_function from above and applies a list that I have provided below-9.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="heatmap-of-spearman-correlations" class="section level3">
 <h3>Heatmap of spearman correlations</h3>
@@ -859,14 +1480,26 @@ wide_scatter &lt;- after_filter_with_metadata %&gt;%
 
 attribute_labels_df &lt;- cleaned_metadata_24hr %&gt;%
    select(Sex, Species, Ind, Stimulus, Final_sample_name) %&gt;%
-   column_to_rownames(var = &quot;Final_sample_name&quot;) %&gt;% 
-   as.tibble()
+   column_to_rownames(&quot;Final_sample_name&quot;) %&gt;% 
+   as.data.frame()
+
 #head(attribute_labels_df)
  
- spearman_cor &lt;- cor(
+spearman_cor &lt;- cor(
    spearman_df,
    method = &quot;spearman&quot;
  )
+ 
+attribute_labels_df &lt;- attribute_labels_df[
+  colnames(spearman_cor),
+  ,
+  drop = FALSE
+]
+## This is to verify that the spearman_cor data frame and attribute_labels_df have the same ordering so that the heatmap clusters appropriately, we want the output to be TRUE 
+# identical(
+#   rownames(attribute_labels_df),
+#   colnames(spearman_cor)
+# )
  
  individual_colors &lt;- structure(
    # brewer.pal(12, &quot;Set3&quot;), ## I would use this line of code if I had 12 unique Individuals. However, I have 14, so I need to use the one below to generate colors outside of the main 12 colors in the brwer.pal structure
@@ -909,10 +1542,47 @@ attribute_labels_df &lt;- cleaned_metadata_24hr %&gt;%
    width = unit(24, &quot;cm&quot;),
    height = unit(20, &quot;cm&quot;),
    row_names_gp = gpar(fontsize = 6),
-   column_names_gp = gpar(fontsize = 6), 
+   column_names_gp = gpar(fontsize = 6),
    top_annotation = heatmap_anno
  )</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-6-1.png" alt="" width="1248" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-6-1.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="scree-plot" class="section level3">
 <h3>Scree plot</h3>
@@ -1234,15 +1904,64 @@ head(pca_anno)</code></pre>
 4   24         10 uM   10      DDR NUTL_10_24_C1
 5   24         10 uM   10      VEH DMSO_10_24_C1
 6   24       1 ug/mL    1      IMR   LPS_1_24_C1</code></pre>
-<pre class="r"><code>ggplot(pca_analysis, aes(x = Component , y = Variance)) +
-  geom_bar(stat = &quot;identity&quot;, fill = &quot;maroon&quot;) +
-  geom_line() +
+<pre class="r"><code>ggplot(
+  pca_analysis %&gt;%
+    dplyr::filter(Component &lt;= 10),
+  aes(x = Component, y = Variance)
+  ) +
+  geom_bar(
+    stat = &quot;identity&quot;,
+    fill = &quot;maroon&quot;
+  ) +
+  geom_line(
+    aes(group = 1)
+  ) +
   geom_point() +
+  scale_x_continuous(
+    breaks = 1:10
+  ) +
   xlab(&quot;Principal Components&quot;) +
-  ylab(&quot;Proportion of Variances&quot;) +
-  ggtitle(&quot; Analysis of Components Contributing to Variance&quot;) +
+  ylab(&quot;Proportion of Variance (%)&quot;) +
+  ggtitle(&quot;Analysis of Components Contributing to Variance&quot;) +
   theme_bw()</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-7-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/unnamed-chunk-7-1.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="observations-on-which-factors-have-the-most-significant-effects-on-principal-component-variances"
@@ -1369,7 +2088,170 @@ plots_of_pcas &lt;- lapply(names(facs), function(f_label) {
 
   grid.arrange(f_v_pc1, f_v_pc2, f_v_pc3, f_v_pc4, f_v_pc5, f_v_pc6, ncol = 2, top = paste0(f_label,&quot; PCA Analyses&quot;))
 })</code></pre>
-<p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/Here%20I%20will%20apply%20the%20function%20about%20to%20this%20current%20function%20with%20a%20list%20to%20plot%20all%20PCA%20variance%20graphs%20of%20interest-1.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/Here%20I%20will%20apply%20the%20function%20about%20to%20this%20current%20function%20with%20a%20list%20to%20plot%20all%20PCA%20variance%20graphs%20of%20interest-2.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/Here%20I%20will%20apply%20the%20function%20about%20to%20this%20current%20function%20with%20a%20list%20to%20plot%20all%20PCA%20variance%20graphs%20of%20interest-3.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/Here%20I%20will%20apply%20the%20function%20about%20to%20this%20current%20function%20with%20a%20list%20to%20plot%20all%20PCA%20variance%20graphs%20of%20interest-4.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/Here%20I%20will%20apply%20the%20function%20about%20to%20this%20current%20function%20with%20a%20list%20to%20plot%20all%20PCA%20variance%20graphs%20of%20interest-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Here-I-will-apply-the-function-about-to-this-current-function-with-a-list-to-plot-all-PCA-variance-graphs-of-interest-1">
+Past versions of "Here I will apply the function about to this current
+function with a list to plot all PCA variance graphs of interest-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Here-I-will-apply-the-function-about-to-this-current-function-with-a-list-to-plot-all-PCA-variance-graphs-of-interest-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/Here I will apply the function about to this current function with a list to plot all PCA variance graphs of interest-1.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/Here%20I%20will%20apply%20the%20function%20about%20to%20this%20current%20function%20with%20a%20list%20to%20plot%20all%20PCA%20variance%20graphs%20of%20interest-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Here-I-will-apply-the-function-about-to-this-current-function-with-a-list-to-plot-all-PCA-variance-graphs-of-interest-2">
+Past versions of "Here I will apply the function about to this current
+function with a list to plot all PCA variance graphs of interest-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Here-I-will-apply-the-function-about-to-this-current-function-with-a-list-to-plot-all-PCA-variance-graphs-of-interest-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/Here I will apply the function about to this current function with a list to plot all PCA variance graphs of interest-2.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/Here%20I%20will%20apply%20the%20function%20about%20to%20this%20current%20function%20with%20a%20list%20to%20plot%20all%20PCA%20variance%20graphs%20of%20interest-3.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Here-I-will-apply-the-function-about-to-this-current-function-with-a-list-to-plot-all-PCA-variance-graphs-of-interest-3">
+Past versions of "Here I will apply the function about to this current
+function with a list to plot all PCA variance graphs of interest-3.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Here-I-will-apply-the-function-about-to-this-current-function-with-a-list-to-plot-all-PCA-variance-graphs-of-interest-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/Here I will apply the function about to this current function with a list to plot all PCA variance graphs of interest-3.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/Here%20I%20will%20apply%20the%20function%20about%20to%20this%20current%20function%20with%20a%20list%20to%20plot%20all%20PCA%20variance%20graphs%20of%20interest-4.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Here-I-will-apply-the-function-about-to-this-current-function-with-a-list-to-plot-all-PCA-variance-graphs-of-interest-4">
+Past versions of "Here I will apply the function about to this current
+function with a list to plot all PCA variance graphs of interest-4.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Here-I-will-apply-the-function-about-to-this-current-function-with-a-list-to-plot-all-PCA-variance-graphs-of-interest-4"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/Here I will apply the function about to this current function with a list to plot all PCA variance graphs of interest-4.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div
 id="pca-plot-demonstrating-speciessexindividual-pc1-and-treatment-pc2-stratification"
@@ -1417,6 +2299,47 @@ ggplot(
   ) +
   theme_classic()</code></pre>
 <p><img src="figure/PHTO_RNAseq_Quality_analysis.Rmd/This%20chunk%20of%20code%20is%20my%20attempt%20at%20creating%20PCA%20plots%20to%20illustrate%20which%20factors%20contribute%20to%20varience%20between%20samples-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-This-chunk-of-code-is-my-attempt-at-creating-PCA-plots-to-illustrate-which-factors-contribute-to-varience-between-samples-1">
+Past versions of "This chunk of code is my attempt at creating PCA plots
+to illustrate which factors contribute to varience between
+samples-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-This-chunk-of-code-is-my-attempt-at-creating-PCA-plots-to-illustrate-which-factors-contribute-to-varience-between-samples-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/93a48973b85da6aa02d2a176fa2a5bac7722f197/docs/figure/PHTO_RNAseq_Quality_analysis.Rmd/This chunk of code is my attempt at creating PCA plots to illustrate which factors contribute to varience between samples-1.png" target="_blank">93a4897</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-08-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1426,7 +2349,7 @@ Session information
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 4.6.0 (2026-04-24 ucrt)
+<pre><code>R version 4.6.1 (2026-06-24 ucrt)
 Platform: x86_64-w64-mingw32/x64
 Running under: Windows 11 x64 (build 26200)
 
@@ -1462,7 +2385,7 @@ other attached packages:
 [34] workflowr_1.7.2       
 
 loaded via a namespace (and not attached):
-  [1] splines_4.6.0           later_1.4.8             ggplotify_0.1.3        
+  [1] splines_4.6.1           later_1.4.8             ggplotify_0.1.3        
   [4] polyclip_1.10-7         enrichit_0.1.5          rpart_4.1.27           
   [7] httr2_1.2.3             lifecycle_1.0.5         rstatix_1.0.0          
  [10] doParallel_1.0.17       rprojroot_2.1.1         processx_3.9.0         
@@ -1479,7 +2402,7 @@ loaded via a namespace (and not attached):
  [43] matrixStats_1.5.0       base64enc_0.1-6         Seqinfo_1.2.0          
  [46] jsonlite_2.0.0          GetoptLong_1.1.1        Formula_1.2-5          
  [49] iterators_1.0.14        systemfonts_1.3.2       foreach_1.5.2          
- [52] tools_4.6.0             ggnewscale_0.5.2        treeio_1.36.1          
+ [52] tools_4.6.1             ggnewscale_0.5.2        treeio_1.36.1          
  [55] Rcpp_1.1.1-1.1          glue_1.8.1              xfun_0.57              
  [58] qvalue_2.44.0           withr_3.0.3             fastmap_1.2.0          
  [61] callr_3.8.0             digest_0.6.39           timechange_0.4.0       
@@ -1493,11 +2416,11 @@ loaded via a namespace (and not attached):
  [85] ggfun_0.2.1             knitr_1.51              rstudioapi_0.19.0      
  [88] tzdb_0.5.0              reshape2_1.4.5          rjson_0.2.23           
  [91] checkmate_2.3.4         nlme_3.1-169            cachem_1.1.0           
- [94] zoo_1.8-15              GlobalOptions_0.1.4     parallel_4.6.0         
+ [94] zoo_1.8-15              GlobalOptions_0.1.4     parallel_4.6.1         
  [97] foreign_0.8-91          pillar_1.11.1           vctrs_0.7.3            
 [100] promises_1.5.0          tidydr_0.0.6            car_3.1-5              
 [103] cluster_2.1.8.2         htmlTable_2.5.0         evaluate_1.0.5         
-[106] cli_3.6.6               locfit_1.5-9.12         compiler_4.6.0         
+[106] cli_3.6.6               locfit_1.5-9.12         compiler_4.6.1         
 [109] rlang_1.2.0             crayon_1.5.3            ggsignif_0.6.4         
 [112] labeling_0.4.3          getPass_0.2-4           plyr_1.8.9             
 [115] fs_2.1.0                ggiraph_0.9.6           stringi_1.8.7          
