@@ -513,15 +513,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree30962415b8af6d97d26611327d7ba73e8404d002targetblank3096241a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree3f4dc261a1abd353f322b195e69fe7a135456d37targetblank3f4dc26a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/hatamtam/PHTO/tree/30962415b8af6d97d26611327d7ba73e8404d002" target="_blank">3096241</a>
+<a href="https://github.com/hatamtam/PHTO/tree/3f4dc261a1abd353f322b195e69fe7a135456d37" target="_blank">3f4dc26</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree30962415b8af6d97d26611327d7ba73e8404d002targetblank3096241a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree3f4dc261a1abd353f322b195e69fe7a135456d37targetblank3f4dc26a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -531,7 +531,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/hatamtam/PHTO/tree/30962415b8af6d97d26611327d7ba73e8404d002" target="_blank">3096241</a>.
+<a href="https://github.com/hatamtam/PHTO/tree/3f4dc261a1abd353f322b195e69fe7a135456d37" target="_blank">3f4dc26</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -605,6 +605,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/3f4dc261a1abd353f322b195e69fe7a135456d37/analysis/PHTO_DGE_Analysis.Rmd" target="_blank">3f4dc26</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+<td>
+wflow_publish("analysis/PHTO_DGE_Analysis.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/hatamtam/PHTO/621e8001d449bf10d41ce9677125cc2948d09102/docs/PHTO_DGE_Analysis.html" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1003,6 +1037,43 @@ Up                  1928              26</code></pre>
 <pre><code>[1] 29</code></pre>
 <pre class="r"><code>plotSA(all_dge_efit2, main = &quot;Mean-variance All Response Samples final model trend&quot;)</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-12-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
+Past versions of unnamed-chunk-12-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-12-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-12-1.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="toptable-assignments" class="section level2">
@@ -1112,7 +1183,11 @@ PHTO_lookup_table &lt;- tibble::tibble(
   dplyr::rename(
     Entrez_ID = ENTREZID,
     Symbol = SYMBOL
-  )
+  ) %&gt;% 
+  mutate(id_label = ifelse(
+    is.na(Symbol),
+    Ensembl,
+    Symbol))
 
 PHTO_ensembl_to_gene_mapping_sucess &lt;- PHTO_lookup_table %&gt;%
   dplyr::summarise(
@@ -1170,15 +1245,14 @@ PHTO_toptable_list &lt;- list(
 generate_volcano_plot &lt;- function(toptable, list_name) {
 
   volcano_colors &lt;- toptable %&gt;%
-    tibble::rownames_to_column(&quot;Genes&quot;) %&gt;%
+    tibble::rownames_to_column(&quot;Gene&quot;) %&gt;%
     dplyr::left_join(PHTO_lookup_table %&gt;% 
-                tibble::rownames_to_column(&quot;Ensemble&quot;) %&gt;% 
-                dplyr::select(Ensemble, Symbol),
-              by = c(&quot;Genes&quot; = &quot;Ensemble&quot;)) %&gt;% 
+                dplyr::select(Ensembl, Symbol),
+              by = c(&quot;Gene&quot; = &quot;Ensembl&quot;)) %&gt;% 
     dplyr::mutate(
     id_label = ifelse(
       is.na(Symbol),
-      Genes,
+      Gene,
       Symbol
     )
   ) %&gt;% 
@@ -1300,90 +1374,1250 @@ for (i in seq_along(PHTO_toptable_results)) {
 <pre><code>
  HvC_H2O : Up = 2712 | Down = 2612 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-1.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-1">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-1.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-1.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  C_DMSOvH2O : Up = 0 | Down = 0 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-2.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-2">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-2.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-2"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-2.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  H_DMSOvH2O : Up = 0 | Down = 0 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-3.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-3">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-3.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-3"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-3.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  HvC_DMSO : Up = 2573 | Down = 2514 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-4.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-4">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-4.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-4"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-4.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  Int_DMSO : Up = 0 | Down = 0 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-5.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-5">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-5.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-5"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-5.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  C_TNFavH2O : Up = 128 | Down = 4 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-6.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-6">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-6.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-6"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-6.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  H_TNFavH2O : Up = 41 | Down = 0 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-7.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-7">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-7.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-7"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-7.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  HvC_TNFa : Up = 2660 | Down = 2487 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-8.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-8">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-8.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-8"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-8.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  Int_TNFa : Up = 0 | Down = 0 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-9.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-9">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-9.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-9"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-9.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  C_LPSvH2O : Up = 13 | Down = 0 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-10.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-10">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-10.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-10"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-10.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  H_LPSvH2O : Up = 1 | Down = 0 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-11.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-11">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-11.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-11"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-11.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  HvC_LPS : Up = 2842 | Down = 2673 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-12.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-12">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-12.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-12"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-12.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  Int_LPS : Up = 0 | Down = 0 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-13.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-13">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-13.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-13"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-13.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  HvC_DOX : Up = 2849 | Down = 2467 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-14.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-14">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-14.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-14"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-14.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  C_DOXvDMSO : Up = 4388 | Down = 4986 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-15.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-15">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-15.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-15"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-15.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  H_DOXvDMSO : Up = 4296 | Down = 4735 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-16.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-16">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-16.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-16"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-16.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  Int_DOX : Up = 879 | Down = 659 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-17.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-17">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-17.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-17"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-17.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  HvC_NUTL : Up = 2698 | Down = 2739 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-18.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-18">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-18.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-18"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-18.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  C_NUTLvDMSO : Up = 586 | Down = 526 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-19.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-19">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-19.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-19"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-19.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  H_NUTLvDMSO : Up = 518 | Down = 651 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-20.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-20">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-20.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-20"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-20.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  Int_NUTL : Up = 1 | Down = 1 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-21.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-21">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-21.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-21"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-21.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  HvC_TUN : Up = 2588 | Down = 2448 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-22.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-22">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-22.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-22"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-22.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  C_TUNvDMSO : Up = 1722 | Down = 1818 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-23.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-23">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-23.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-23"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-23.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  H_TUNvDMSO : Up = 1760 | Down = 1746 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-24.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-24">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-24.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-24"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-24.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  Int_TUN : Up = 19 | Down = 7 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-25.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-25">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-25.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-25"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-25.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  HvC_THA : Up = 2592 | Down = 2526 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-26.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-26">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-26.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-26"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-26.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  C_THAvDMSO : Up = 2136 | Down = 2471 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-27.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-27">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-27.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-27"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-27.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  H_THAvDMSO : Up = 1928 | Down = 2329 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-28.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-28">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-28.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-28"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-28.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
  Int_THA : Up = 26 | Down = 18 </code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-29.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-29">
+Past versions of "Volcano Plots comparing treatment conditions within
+the same species using limma-29.png"
+</button>
+</p>
+<div
+id="fig-no-spaces-Volcano-Plots-comparing-treatment-conditions-within-the-same-species-using-limma-29"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/Volcano Plots comparing treatment conditions within the same species using limma-29.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="scatter-plots" class="section level2">
 <h2>Scatter plots</h2>
@@ -1769,11 +3003,275 @@ comparison_table</code></pre>
 
 PHTO_fc_results$TUN$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-1">
+Past versions of unnamed-chunk-18-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-1.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>purrr::walk(
   PHTO_fc_results,
   ~ print(.x$plot)
 )</code></pre>
-<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-2.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-3.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-4.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-5.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-6.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-7.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-2">
+Past versions of unnamed-chunk-18-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-2.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-3.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-3">
+Past versions of unnamed-chunk-18-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-3.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-4.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-4">
+Past versions of unnamed-chunk-18-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-4.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-5.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-5">
+Past versions of unnamed-chunk-18-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-5.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-6.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-6">
+Past versions of unnamed-chunk-18-6.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-6.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-7.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-7">
+Past versions of unnamed-chunk-18-7.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-7.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>interaction_summary &lt;- purrr::imap_dfr(
   PHTO_fc_results,
   function(x, treatment) {
@@ -2036,6 +3534,43 @@ class="section level2">
 )
 TNFa_direction_result$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-1">
+Past versions of unnamed-chunk-20-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-20-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-1.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>TNFa_direction_result$interaction_counts</code></pre>
 <pre><code>[1] Direction_group Direction       n              
 &lt;0 rows&gt; (or 0-length row.names)</code></pre>
@@ -2086,16 +3621,238 @@ PHTO_direction_results &lt;- plot_all_interaction_directions(
 
 PHTO_direction_results$TNFa$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-2.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-2">
+Past versions of unnamed-chunk-20-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-20-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-2.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>PHTO_direction_results$LPS$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-3.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-3">
+Past versions of unnamed-chunk-20-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-20-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-3.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>PHTO_direction_results$TUN$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-4.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-4">
+Past versions of unnamed-chunk-20-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-20-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-4.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>PHTO_direction_results$THA$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-5.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-5">
+Past versions of unnamed-chunk-20-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-20-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-5.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>PHTO_direction_results$NUTL$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-6.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-6">
+Past versions of unnamed-chunk-20-6.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-20-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-6.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>PHTO_direction_results$DOX$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-7.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-7">
+Past versions of unnamed-chunk-20-7.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-20-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/621e8001d449bf10d41ce9677125cc2948d09102/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-7.png" target="_blank">621e800</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>PHTO_direction_summary &lt;- purrr::imap_dfr(
   PHTO_direction_results,
   
