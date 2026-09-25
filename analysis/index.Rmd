@@ -12,3 +12,5 @@ Welcome to my research website! This is where my R code will be
 
 ### PHTO RNA-seq analysis pipeline
 [PHTO RNA-seq analyses](https://hatamtam.github.io/PHTO/PHTO_RNAseq_Quality_analysis.html)
+
+[PHTO DEG analyses](https://hatamtam.github.io/PHTO/PHTO_DEG_Analysis.html)
