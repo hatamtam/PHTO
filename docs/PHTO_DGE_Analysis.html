@@ -1,0 +1,2333 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Harsha Tamtam" />
+
+<meta name="date" content="2026-09-25" />
+
+<title>PHTO_DGE_Analysis</title>
+
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">PHTO</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">PHTO_DGE_Analysis</h1>
+<h4 class="author">Harsha Tamtam</h4>
+<h4 class="date">2026-09-25</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2026-09-25
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>PHTO/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.2). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20260812code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20260812)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20260812code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20260812)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree30962415b8af6d97d26611327d7ba73e8404d002targetblank3096241a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/hatamtam/PHTO/tree/30962415b8af6d97d26611327d7ba73e8404d002" target="_blank">3096241</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree30962415b8af6d97d26611327d7ba73e8404d002targetblank3096241a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/hatamtam/PHTO/tree/30962415b8af6d97d26611327d7ba73e8404d002" target="_blank">3096241</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
+
+Untracked files:
+    Untracked:  data/Emma_counts_file.csv
+    Untracked:  data/Emma_metadata_updated_all.RDS
+    Untracked:  data/Ensembl_Entrez_Symbol_table.RDS
+    Untracked:  data/PHTO_filtered_log2_cpm.RDS
+    Untracked:  data/PHTO_lookup_table.RDS
+    Untracked:  data/PHTO_toptable_results.RDS
+    Untracked:  data/dge_list.RDS
+
+Unstaged changes:
+    Deleted:    analysis/first-analysis.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/PHTO_DGE_Analysis.Rmd</code>) and
+HTML (<code>docs/PHTO_DGE_Analysis.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/30962415b8af6d97d26611327d7ba73e8404d002/analysis/PHTO_DGE_Analysis.Rmd" target="_blank">3096241</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+<td>
+wflow_publish("analysis/PHTO_DGE_Analysis.Rmd")
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<style type="text/css">
+pre {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+pre[class] {
+  max-height: 200px;
+}
+</style>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+</div>
+<div id="library-section" class="section level2">
+<h2>Library Section</h2>
+<pre class="r"><code>library(tidyverse)
+library(dplyr)
+library(tibble)
+library(scales)
+library(cowplot)
+library(edgeR)
+library(smplot2)
+library(ggpubr)
+library(workflowr)
+library(ComplexHeatmap)
+library(RColorBrewer)
+library(gridExtra)
+library(ggrepel)
+library(ggVennDiagram)
+library(grid)
+library(ggrepel)
+library(org.Hs.eg.db)
+library(enrichplot)
+library(clusterProfiler)
+library(circlize)
+library(gprofiler2)
+library(stringr)
+library(readr)
+library(GO.db)
+library(AnnotationDbi)
+library(plotrix)</code></pre>
+</div>
+<div id="file-calling" class="section level2">
+<h2>File Calling</h2>
+<pre class="r"><code>PHTO_metadata &lt;- readRDS(&quot;data/Emma_metadata_updated_all.RDS&quot;)
+PHTO_counts &lt;- read.csv(&quot;data/Emma_counts_file.csv&quot;)
+
+working_counts_file &lt;- PHTO_counts %&gt;% 
+  as.data.frame() %&gt;% 
+  rename(., Ensembl = gene_id) %&gt;% 
+  pivot_longer(-Ensembl, names_to = &quot;Samples&quot;, values_to = &quot;raw_counts&quot;) %&gt;% 
+  left_join(PHTO_metadata, by = c(&quot;Samples&quot; = &quot;Sample_ID&quot;)) %&gt;% 
+  dplyr::filter(!Stimulus %in% c(&quot;EtOH&quot;, &quot;PFOA&quot;, &quot;BPA&quot;)) %&gt;%
+  dplyr::filter(Time == 24) %&gt;% 
+  dplyr::select(Ensembl, raw_counts, Final_sample_name) %&gt;% 
+  pivot_wider(names_from = Final_sample_name, values_from = raw_counts) %&gt;% 
+  column_to_rownames(&quot;Ensembl&quot;)
+
+working_metadata_file &lt;- PHTO_metadata %&gt;% 
+  dplyr::filter(!Stimulus %in% c(&quot;EtOH&quot;, &quot;PFOA&quot;, &quot;BPA&quot;)) %&gt;%
+  dplyr::filter(Time == 24) %&gt;% 
+  dplyr::mutate(
+    Grouping = case_when(
+      Species == &quot;C&quot; &amp; Stimulus == &quot;DMSO&quot; ~ &quot;Chimp_DMSO&quot;,
+      Species == &quot;H&quot; &amp; Stimulus == &quot;DMSO&quot; ~ &quot;Human_DMSO&quot;,
+      Species == &quot;C&quot; &amp; Stimulus == &quot;H2O&quot; ~ &quot;Chimp_H2O&quot;,
+      Species == &quot;H&quot; &amp; Stimulus == &quot;H2O&quot; ~ &quot;Human_H2O&quot;,
+      Species == &quot;C&quot; &amp; Stimulus == &quot;DOX&quot; ~ &quot;Chimp_DOX&quot;,
+      Species == &quot;H&quot; &amp; Stimulus == &quot;DOX&quot; ~ &quot;Human_DOX&quot;,
+      Species == &quot;C&quot; &amp; Stimulus == &quot;NUTL&quot; ~ &quot;Chimp_NUTL&quot;,
+      Species == &quot;H&quot; &amp; Stimulus == &quot;NUTL&quot; ~ &quot;Human_NUTL&quot;,
+      Species == &quot;C&quot; &amp; Stimulus == &quot;TUN&quot; ~ &quot;Chimp_TUN&quot;,
+      Species == &quot;H&quot; &amp; Stimulus == &quot;TUN&quot; ~ &quot;Human_TUN&quot;,
+      Species == &quot;C&quot; &amp; Stimulus == &quot;THA&quot; ~ &quot;Chimp_THA&quot;,
+      Species == &quot;H&quot; &amp; Stimulus == &quot;THA&quot; ~ &quot;Human_THA&quot;,
+      Species == &quot;C&quot; &amp; Stimulus == &quot;LPS&quot; ~ &quot;Chimp_LPS&quot;,
+      Species == &quot;H&quot; &amp; Stimulus == &quot;LPS&quot; ~ &quot;Human_LPS&quot;,
+      Species == &quot;C&quot; &amp; Stimulus == &quot;TNFa&quot; ~ &quot;Chimp_TNFa&quot;,
+      Species == &quot;H&quot; &amp; Stimulus == &quot;TNFa&quot; ~ &quot;Human_TNFa&quot;
+  )
+)</code></pre>
+</div>
+<div id="converting-to-log2-cpm-and-filtering-rowmeans-log2cpm-0"
+class="section level2">
+<h2>Converting to Log2 CPM and filtering rowMeans log2cpm &gt; 0:</h2>
+<pre class="r"><code>log2cpm &lt;- cpm(working_counts_file, log = TRUE)
+filtered_counts &lt;- working_counts_file[rowMeans(log2cpm)&gt; 0,]
+
+# dim(filtered_counts)
+# str(filtered_counts)</code></pre>
+<p>I will be ensuring my factors for the contrast matrices I will make
+are set correctly, but I need to make new data tables for each treatment
+type</p>
+</div>
+<div id="identifying-dges-for-each-response-set-ddr-upr-imr"
+class="section level2">
+<h2>Identifying DGEs for each Response Set (DDR, UPR, IMR)</h2>
+<div
+id="dna-damage-response-ddr-dge-voom-and-contrast-matrix-development"
+class="section level3">
+<h3>DNA Damage Response (DDR) DGE, Voom, and Contrast Matrix
+Development</h3>
+<div id="using-model-matrix-species-stimulus" class="section level4">
+<h4>Using model matrix (~ Species * Stimulus)</h4>
+</div>
+<div id="using-model-matrix-0-grouping" class="section level4">
+<h4>Using model matrix (~ 0 + Grouping)</h4>
+</div>
+<div id="using-model-matrix-0-speciesstimulus" class="section level4">
+<h4>Using model matrix (~ 0 + Species:Stimulus)</h4>
+</div>
+<div id="comparison-of-model.matricies-for-ddr" class="section level4">
+<h4>Comparison of model.matricies for DDR</h4>
+</div>
+</div>
+<div
+id="unfolding-protein-response-upr-dge-voom-and-contrast-matrix-development"
+class="section level3">
+<h3>Unfolding Protein Response (UPR) DGE, Voom, and Contrast Matrix
+Development</h3>
+</div>
+<div
+id="innate-immune-response-imr-dge-voom-and-contrast-matrix-development"
+class="section level3">
+<h3>Innate Immune Response (IMR) DGE, Voom, and Contrast Matrix
+Development</h3>
+</div>
+</div>
+<div id="identifying-dges-for-all-responses-as-one-set"
+class="section level2">
+<h2>Identifying DGEs for ALL Responses as One Set</h2>
+<div id="using-model.matrix0-speciesstimulus" class="section level3">
+<h3>Using model.matrix(~0 + Species:Stimulus)</h3>
+</div>
+<div id="using-model.matrix0-grouping" class="section level3">
+<h3>Using model.matrix(~0 + Grouping)</h3>
+</div>
+<div
+id="using-model.matrix-species-stimulus-using-chimp-and-h2o-as-my-references"
+class="section level3">
+<h3>Using model.matrix (~ Species * Stimulus), using Chimp and H2O as my
+references</h3>
+<pre class="r"><code>filtered_counts &lt;- filtered_counts[, working_metadata_file$Final_sample_name] # Run this to explicitly ensure sample ordering is identical between counts and metadata file
+
+# # Creating DDR-specific DGE list
+all_dge &lt;- DGEList(
+  counts = filtered_counts
+)
+
+all_dge &lt;- calcNormFactors(
+  all_dge,
+  method = &quot;TMM&quot;
+)
+
+# # Building the DDR design matrix
+working_metadata_file$Stimulus &lt;- factor(
+  working_metadata_file$Stimulus,
+  levels = c(&quot;H2O&quot;, # Water is leveled first because this will be our reference
+             &quot;DMSO&quot;,
+             &quot;DOX&quot;,
+             &quot;NUTL&quot;,
+             &quot;TUN&quot;,
+             &quot;THA&quot;,
+             &quot;TNFa&quot;,
+             &quot;LPS&quot;
+             )
+  )
+
+working_metadata_file$Species &lt;- relevel(
+  factor(working_metadata_file$Species),
+  ref = &quot;C&quot;
+)
+
+working_metadata_file$Stimulus &lt;- relevel(
+  factor(working_metadata_file$Stimulus),
+  ref = &quot;H2O&quot;
+) # We are setting the Stimulus reference to H2O because DMSO is dissolved in H2O
+
+all_dge_design &lt;- model.matrix(
+  ~ Species * Stimulus, # ORDER MATTERS: here, with species first and stimulus second, I am controlling for species while observing interactions of the main effect, stimulus
+  data = working_metadata_file
+)
+
+colnames(all_dge_design)</code></pre>
+<pre><code> [1] &quot;(Intercept)&quot;           &quot;SpeciesH&quot;              &quot;StimulusDMSO&quot;         
+ [4] &quot;StimulusDOX&quot;           &quot;StimulusNUTL&quot;          &quot;StimulusTUN&quot;          
+ [7] &quot;StimulusTHA&quot;           &quot;StimulusTNFa&quot;          &quot;StimulusLPS&quot;          
+[10] &quot;SpeciesH:StimulusDMSO&quot; &quot;SpeciesH:StimulusDOX&quot;  &quot;SpeciesH:StimulusNUTL&quot;
+[13] &quot;SpeciesH:StimulusTUN&quot;  &quot;SpeciesH:StimulusTHA&quot;  &quot;SpeciesH:StimulusTNFa&quot;
+[16] &quot;SpeciesH:StimulusLPS&quot; </code></pre>
+<pre class="r"><code># all_dge_design
+
+colnames(all_dge_design) &lt;- c(
+  &quot;Intercept&quot;, # means Chimp + H2O
+  &quot;SpeciesH&quot;, # means Human vs Chimp under H2O
+  &quot;StimulusDMSO&quot;, # means Chimp DMSO vs H2O
+  &quot;StimulusDOX&quot;, # means Chimp DOX vs H2O
+  &quot;StimulusNUTL&quot;, # means Chimp NUTL vs H2O
+  &quot;StimulusTUN&quot;, # means Chimp TUN vs H2O
+  &quot;StimulusTHA&quot;, # means Chimp THA vs H2O
+  &quot;StimulusTNFa&quot;, # means Chimp TNFa vs H2O
+  &quot;StimulusLPS&quot;, # means Chimp LPS vs H2O
+  &quot;SpeciesH_StimulusDMSO&quot;, # means (Human DMSO vs H2O) - (Chimp DMSO vs H2O)
+  &quot;SpeciesH_StimulusDOX&quot;, # means (Human DOX vs H2O) - (Chimp DOX vs H2O)
+  &quot;SpeciesH_StimulusNUTL&quot;, # means (Human NUTL vs H2O) - (Chimp NUTL vs H2O)
+  &quot;SpeciesH_StimulusTUN&quot;, # means (Human TUN vs H2O) - (Chimp TUN vs H2O)
+  &quot;SpeciesH_StimulusTHA&quot;, # means (Human THA vs H2O) - (Chimp THA vs H2O)
+  &quot;SpeciesH_StimulusTNFa&quot;, # means (Human TNFa vs H2O) - (Chimp TNFa vs H2O)
+  &quot;SpeciesH_StimulusLPS&quot; # means (Human LPS vs H2O) - (Chimp LPS vs H2O)
+)
+
+# Running Duplicate Correlations
+all_dge_cor_fit &lt;- duplicateCorrelation(object = all_dge$counts,
+                                design = all_dge_design,
+                                block = working_metadata_file$Ind
+                                )
+
+all_dge_voom_trend &lt;- voom(all_dge,
+                   all_dge_design,
+                   block = working_metadata_file$Ind, 
+                   correlation = all_dge_cor_fit$consensus.correlation,
+                   plot = FALSE)
+
+
+# Fitting linear model
+all_dge_fit &lt;- lmFit(
+  all_dge_voom_trend,
+  all_dge_design,
+  block = working_metadata_file$Ind,
+  correlation = all_dge_cor_fit$consensus.correlation
+)
+
+# head(all_dge_design)
+
+# Defining contrasts
+all_dge_contrast_matrix &lt;- makeContrasts(
+#Setting my reference control
+    Human_vs_Chimp_H2O =
+    SpeciesH,
+# -------------------------------------------------------------------------    
+
+# DMSO comparisons 
+  Chimp_DMSO_vs_H2O =
+    StimulusDMSO,
+  Human_DMSO_vs_H2O =
+    StimulusDMSO + SpeciesH_StimulusDMSO,
+  Human_vs_Chimp_DMSO =
+    SpeciesH + SpeciesH_StimulusDMSO,
+  Interaction_DMSO = 
+    SpeciesH_StimulusDMSO,
+# -------------------------------------------------------------------------    
+
+# IMR comparisons    
+  Chimp_TNFa_vs_H2O =
+    StimulusTNFa,
+  Human_TNFa_vs_H2O =
+    StimulusTNFa + SpeciesH_StimulusTNFa,
+  Human_vs_Chimp_TNFa =
+    SpeciesH + SpeciesH_StimulusTNFa,
+  TNFa_Interaction =
+    SpeciesH_StimulusTNFa,
+# -------------------------------------------------------------------------    
+  
+  Chimp_LPS_vs_H2O =
+    StimulusLPS,
+  Human_LPS_vs_H2O =
+    StimulusLPS + SpeciesH_StimulusLPS,
+  Human_vs_Chimp_LPS =
+    SpeciesH + SpeciesH_StimulusLPS,
+  LPS_Interaction =
+    SpeciesH_StimulusLPS,
+# -------------------------------------------------------------------------    
+
+# DDR comparisons  
+  Human_vs_Chimp_DOX = 
+    SpeciesH + SpeciesH_StimulusDOX,
+  Chimp_DOX_vs_DMSO =
+    StimulusDOX - StimulusDMSO, # This outputs: ((Chimp DOX - Chimp H2O) - (Chimp DMSO - Chimp H2O)) = Chimp DOX - Chimp DMSO
+  Human_DOX_vs_DMSO =
+    StimulusDOX - StimulusDMSO + # This outputs: Chimp DOX - Chimp DMSO
+    SpeciesH_StimulusDOX - # This outputs: (Human DOX vs Human H2O) - (Chimp DOX vs Chimp H2O)
+    SpeciesH_StimulusDMSO, # This outputs: -[(Human DMSO vs Human H2O) - (Chimp DMSO vs Chimp H2O)]
+# The long equation becomes: Chimp DOX - Chimp DMSO + Human DOX - Human H2O - Chimp DOX + Chimp H2O - Human DMSO + Human H2O + Chimp DMSO - Chimp H2O
+# OVERALL, this outputs: (Human DOX - Chimp H2O) - (Human DMSO - Chimp H2O) = **Human DOX - Human DMSO**
+# This works because the &quot;vs&quot; symbols between attributes act like minus signs. As a result, terms cancel and we are left with the final result
+  DOX_Interaction =
+    SpeciesH_StimulusDOX -
+    SpeciesH_StimulusDMSO,
+# -------------------------------------------------------------------------    
+  
+  Human_vs_Chimp_NUTL = 
+    SpeciesH + SpeciesH_StimulusNUTL,
+  Chimp_NUTL_vs_DMSO =
+    StimulusNUTL - StimulusDMSO,
+  Human_NUTL_vs_DMSO =
+    StimulusNUTL - StimulusDMSO +
+    SpeciesH_StimulusNUTL -
+    SpeciesH_StimulusDMSO,
+  NUTL_Interaction =
+    SpeciesH_StimulusNUTL -
+    SpeciesH_StimulusDMSO,
+# -------------------------------------------------------------------------    
+
+# UPR comparisons
+  Human_vs_Chimp_TUN = 
+    SpeciesH + SpeciesH_StimulusTUN,
+  Chimp_TUN_vs_DMSO =
+    StimulusTUN - StimulusDMSO,
+  Human_TUN_vs_DMSO =
+    StimulusTUN - StimulusDMSO +
+    SpeciesH_StimulusTUN -
+    SpeciesH_StimulusDMSO,
+  TUN_Interaction =
+    SpeciesH_StimulusTUN -
+    SpeciesH_StimulusDMSO,
+# -------------------------------------------------------------------------    
+
+  Human_vs_Chimp_THA = 
+    SpeciesH + SpeciesH_StimulusTHA,  
+  Chimp_THA_vs_DMSO =
+    StimulusTHA - StimulusDMSO,
+  Human_THA_vs_DMSO =
+    StimulusTHA - StimulusDMSO +
+    SpeciesH_StimulusTHA -
+    SpeciesH_StimulusDMSO,
+  THA_Interaction =
+    SpeciesH_StimulusTHA -
+    SpeciesH_StimulusDMSO,
+# -------------------------------------------------------------------------    
+  levels = all_dge_design
+)
+
+# Applying contrasts across samples
+all_dge_fit2 &lt;- contrasts.fit(all_dge_fit, all_dge_contrast_matrix)
+all_dge_efit2 &lt;- eBayes(all_dge_fit2)
+all_dge_signif_gene_results = decideTests(all_dge_efit2, adjust.method = &quot;BH&quot;, p.value = 0.05)
+
+summary(all_dge_signif_gene_results)</code></pre>
+<pre><code>       Human_vs_Chimp_H2O Chimp_DMSO_vs_H2O Human_DMSO_vs_H2O
+Down                 2612                 0                 0
+NotSig               8893             14217             14217
+Up                   2712                 0                 0
+       Human_vs_Chimp_DMSO Interaction_DMSO Chimp_TNFa_vs_H2O Human_TNFa_vs_H2O
+Down                  2514                0                 4                 0
+NotSig                9130            14217             14085             14176
+Up                    2573                0               128                41
+       Human_vs_Chimp_TNFa TNFa_Interaction Chimp_LPS_vs_H2O Human_LPS_vs_H2O
+Down                  2487                0                0                0
+NotSig                9070            14217            14204            14216
+Up                    2660                0               13                1
+       Human_vs_Chimp_LPS LPS_Interaction Human_vs_Chimp_DOX Chimp_DOX_vs_DMSO
+Down                 2673               0               2467              4986
+NotSig               8702           14217               8901              4843
+Up                   2842               0               2849              4388
+       Human_DOX_vs_DMSO DOX_Interaction Human_vs_Chimp_NUTL Chimp_NUTL_vs_DMSO
+Down                4735             659                2739                526
+NotSig              5186           12679                8780              13105
+Up                  4296             879                2698                586
+       Human_NUTL_vs_DMSO NUTL_Interaction Human_vs_Chimp_TUN Chimp_TUN_vs_DMSO
+Down                  651                1               2448              1818
+NotSig              13048            14215               9181             10677
+Up                    518                1               2588              1722
+       Human_TUN_vs_DMSO TUN_Interaction Human_vs_Chimp_THA Chimp_THA_vs_DMSO
+Down                1746               7               2526              2471
+NotSig             10711           14191               9099              9610
+Up                  1760              19               2592              2136
+       Human_THA_vs_DMSO THA_Interaction
+Down                2329              18
+NotSig              9960           14173
+Up                  1928              26</code></pre>
+<pre class="r"><code>length(colnames(all_dge_signif_gene_results))</code></pre>
+<pre><code>[1] 29</code></pre>
+<pre class="r"><code>plotSA(all_dge_efit2, main = &quot;Mean-variance All Response Samples final model trend&quot;)</code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-12-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="toptable-assignments" class="section level2">
+<h2>Toptable Assignments</h2>
+<pre class="r"><code>Human_vs_Chimp_H2O &lt;- topTable(all_dge_efit2, coef = &quot;Human_vs_Chimp_H2O&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Chimp_DMSO_vs_H2O &lt;- topTable(all_dge_efit2, coef = &quot;Chimp_DMSO_vs_H2O&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_DMSO_vs_H2O &lt;- topTable(all_dge_efit2, coef = &quot;Human_DMSO_vs_H2O&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_vs_Chimp_DMSO &lt;- topTable(all_dge_efit2, coef = &quot;Human_vs_Chimp_DMSO&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Interaction_DMSO &lt;- topTable(all_dge_efit2, coef = &quot;Interaction_DMSO&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Chimp_TNFa_vs_H2O &lt;- topTable(all_dge_efit2, coef = &quot;Chimp_TNFa_vs_H2O&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_TNFa_vs_H2O &lt;- topTable(all_dge_efit2, coef = &quot;Human_TNFa_vs_H2O&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_vs_Chimp_TNFa &lt;- topTable(all_dge_efit2, coef = &quot;Human_vs_Chimp_TNFa&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+TNFa_Interaction &lt;- topTable(all_dge_efit2, coef = &quot;TNFa_Interaction&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Chimp_LPS_vs_H2O &lt;- topTable(all_dge_efit2, coef = &quot;Chimp_LPS_vs_H2O&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_LPS_vs_H2O &lt;- topTable(all_dge_efit2, coef = &quot;Human_LPS_vs_H2O&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_vs_Chimp_LPS &lt;- topTable(all_dge_efit2, coef = &quot;Human_vs_Chimp_LPS&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+LPS_Interaction &lt;- topTable(all_dge_efit2, coef = &quot;LPS_Interaction&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_vs_Chimp_DOX &lt;- topTable(all_dge_efit2, coef = &quot;Human_vs_Chimp_DOX&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Chimp_DOX_vs_DMSO &lt;- topTable(all_dge_efit2, coef = &quot;Chimp_DOX_vs_DMSO&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_DOX_vs_DMSO &lt;- topTable(all_dge_efit2, coef = &quot;Human_DOX_vs_DMSO&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+DOX_Interaction &lt;- topTable(all_dge_efit2, coef = &quot;DOX_Interaction&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_vs_Chimp_NUTL &lt;- topTable(all_dge_efit2, coef = &quot;Human_vs_Chimp_NUTL&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Chimp_NUTL_vs_DMSO &lt;- topTable(all_dge_efit2, coef = &quot;Chimp_NUTL_vs_DMSO&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_NUTL_vs_DMSO &lt;- topTable(all_dge_efit2, coef = &quot;Human_NUTL_vs_DMSO&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+NUTL_Interaction &lt;- topTable(all_dge_efit2, coef = &quot;NUTL_Interaction&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_vs_Chimp_TUN &lt;- topTable(all_dge_efit2, coef = &quot;Human_vs_Chimp_TUN&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Chimp_TUN_vs_DMSO &lt;- topTable(all_dge_efit2, coef = &quot;Chimp_TUN_vs_DMSO&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_TUN_vs_DMSO &lt;- topTable(all_dge_efit2, coef = &quot;Human_TUN_vs_DMSO&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+TUN_Interaction &lt;- topTable(all_dge_efit2, coef = &quot;TUN_Interaction&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_vs_Chimp_THA &lt;- topTable(all_dge_efit2, coef = &quot;Human_vs_Chimp_THA&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Chimp_THA_vs_DMSO &lt;- topTable(all_dge_efit2, coef = &quot;Chimp_THA_vs_DMSO&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+Human_THA_vs_DMSO &lt;- topTable(all_dge_efit2, coef = &quot;Human_THA_vs_DMSO&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+THA_Interaction &lt;- topTable(all_dge_efit2, coef = &quot;THA_Interaction&quot;, adjust.method = &quot;BH&quot;, p.value = 1, number = Inf)
+
+save_PHTO_toptable_list &lt;- list(
+  &quot;HvC_H2O&quot;=Human_vs_Chimp_H2O,
+  &quot;C_DMSOvH2O&quot;=Chimp_DMSO_vs_H2O,
+  &quot;H_DMSOvH2O&quot;=Human_DMSO_vs_H2O,
+  &quot;HvC_DMSO&quot;=Human_vs_Chimp_DMSO,
+  &quot;Int_DMSO&quot;=Interaction_DMSO,
+  &quot;C_TNFavH2O&quot;=Chimp_TNFa_vs_H2O,
+  &quot;H_TNFavH2O&quot;=Human_TNFa_vs_H2O,
+  &quot;HvC_TNFa&quot;=Human_vs_Chimp_TNFa,
+  &quot;Int_TNFa&quot;=TNFa_Interaction,
+  &quot;C_LPSvH2O&quot;=Chimp_LPS_vs_H2O,
+  &quot;H_LPSvH2O&quot;=Human_LPS_vs_H2O,
+  &quot;HvC_LPS&quot;=Human_vs_Chimp_LPS,
+  &quot;Int_LPS&quot;=LPS_Interaction,
+  &quot;HvC_DOX&quot;=Human_vs_Chimp_DOX,
+  &quot;C_DOXvDMSO&quot;=Chimp_DOX_vs_DMSO,
+  &quot;H_DOXvDMSO&quot;=Human_DOX_vs_DMSO,
+  &quot;Int_DOX&quot;=DOX_Interaction,
+  &quot;HvC_NUTL&quot;=Human_vs_Chimp_NUTL,
+  &quot;C_NUTLvDMSO&quot;=Chimp_NUTL_vs_DMSO,
+  &quot;H_NUTLvDMSO&quot;=Human_NUTL_vs_DMSO,
+  &quot;Int_NUTL&quot;=NUTL_Interaction,
+  &quot;HvC_TUN&quot;=Human_vs_Chimp_TUN,
+  &quot;C_TUNvDMSO&quot;=Chimp_TUN_vs_DMSO,
+  &quot;H_TUNvDMSO&quot;=Human_TUN_vs_DMSO,
+  &quot;Int_TUN&quot;=TUN_Interaction,
+  &quot;HvC_THA&quot;=Human_vs_Chimp_THA,
+  &quot;C_THAvDMSO&quot;=Chimp_THA_vs_DMSO,
+  &quot;H_THAvDMSO&quot;=Human_THA_vs_DMSO,
+  &quot;Int_THA&quot;=THA_Interaction
+  )
+
+saveRDS(save_PHTO_toptable_list, &quot;data/PHTO_toptable_results.RDS&quot;)</code></pre>
+</div>
+<div id="look-up-table-for-all-ensembls-of-interest"
+class="section level2">
+<h2>Look Up Table for all Ensembls of interest</h2>
+<pre class="r"><code>## Extracting all unique Ensembl IDs
+PHTO_toptable_results &lt;- readRDS(&quot;data/PHTO_toptable_results.RDS&quot;)
+all_ensembls &lt;- PHTO_toptable_results %&gt;%
+  purrr::map(rownames) %&gt;%
+  unlist() %&gt;%
+  unique()
+
+# length(all_ensembl)
+# 
+# head(all_ensembl)
+
+## Mapping Ensembls to their respective Symbols and Entrez IDs
+PHTO_annotation_df &lt;- AnnotationDbi::select(
+  org.Hs.eg.db,
+  keys = all_ensembls,
+  keytype = &quot;ENSEMBL&quot;,
+  columns = c(
+    &quot;ENSEMBL&quot;,
+    &quot;ENTREZID&quot;,
+    &quot;SYMBOL&quot;
+  )
+) %&gt;%
+  dplyr::distinct(
+    ENSEMBL,
+    .keep_all = TRUE
+  )
+
+
+PHTO_lookup_table &lt;- tibble::tibble(
+  Ensembl = all_ensembls
+) %&gt;%
+  dplyr::left_join(
+    PHTO_annotation_df,
+    by = c(&quot;Ensembl&quot; = &quot;ENSEMBL&quot;)
+  ) %&gt;%
+  dplyr::rename(
+    Entrez_ID = ENTREZID,
+    Symbol = SYMBOL
+  )
+
+PHTO_ensembl_to_gene_mapping_sucess &lt;- PHTO_lookup_table %&gt;%
+  dplyr::summarise(
+    Total = dplyr::n(),
+    
+    Symbol_mapped = sum(!is.na(Symbol)),
+    Symbol_unmapped = sum(is.na(Symbol)),
+    
+    Entrez_mapped = sum(!is.na(Entrez_ID)),
+    Entrez_unmapped = sum(is.na(Entrez_ID))
+  )
+PHTO_ensembl_to_gene_mapping_sucess</code></pre>
+<pre><code># A tibble: 1 × 5
+  Total Symbol_mapped Symbol_unmapped Entrez_mapped Entrez_unmapped
+  &lt;int&gt;         &lt;int&gt;           &lt;int&gt;         &lt;int&gt;           &lt;int&gt;
+1 14217         12927            1290         12927            1290</code></pre>
+<pre class="r"><code>saveRDS(PHTO_lookup_table, &quot;data/PHTO_lookup_table.RDS&quot;)</code></pre>
+</div>
+<div id="volcano-plots" class="section level2">
+<h2>Volcano Plots</h2>
+<pre class="r"><code>PHTO_toptable_results &lt;- readRDS(&quot;data/PHTO_toptable_results.RDS&quot;)
+PHTO_lookup_table &lt;- readRDS(&quot;data/PHTO_lookup_table.RDS&quot;)
+PHTO_toptable_list &lt;- list(
+  &quot;HvC_H2O&quot;,
+  &quot;C_DMSOvH2O&quot;,
+  &quot;H_DMSOvH2O&quot;,
+  &quot;HvC_DMSO&quot;,
+  &quot;Int_DMSO&quot;,
+  &quot;C_TNFavH2O&quot;,
+  &quot;H_TNFavH2O&quot;,
+  &quot;HvC_TNFa&quot;,
+  &quot;Int_TNFa&quot;,
+  &quot;C_LPSvH2O&quot;,
+  &quot;H_LPSvH2O&quot;,
+  &quot;HvC_LPS&quot;,
+  &quot;Int_LPS&quot;,
+  &quot;HvC_DOX&quot;,
+  &quot;C_DOXvDMSO&quot;,
+  &quot;H_DOXvDMSO&quot;,
+  &quot;Int_DOX&quot;,
+  &quot;HvC_NUTL&quot;,
+  &quot;C_NUTLvDMSO&quot;,
+  &quot;H_NUTLvDMSO&quot;,
+  &quot;Int_NUTL&quot;,
+  &quot;HvC_TUN&quot;,
+  &quot;C_TUNvDMSO&quot;,
+  &quot;H_TUNvDMSO&quot;,
+  &quot;Int_TUN&quot;,
+  &quot;HvC_THA&quot;,
+  &quot;C_THAvDMSO&quot;,
+  &quot;H_THAvDMSO&quot;,
+  &quot;Int_THA&quot;
+  )
+
+generate_volcano_plot &lt;- function(toptable, list_name) {
+
+  volcano_colors &lt;- toptable %&gt;%
+    tibble::rownames_to_column(&quot;Genes&quot;) %&gt;%
+    dplyr::left_join(PHTO_lookup_table %&gt;% 
+                tibble::rownames_to_column(&quot;Ensemble&quot;) %&gt;% 
+                dplyr::select(Ensemble, Symbol),
+              by = c(&quot;Genes&quot; = &quot;Ensemble&quot;)) %&gt;% 
+    dplyr::mutate(
+    id_label = ifelse(
+      is.na(Symbol),
+      Genes,
+      Symbol
+    )
+  ) %&gt;% 
+    dplyr::mutate(
+      neglog10AdjP = -log10(pmax(adj.P.Val, 1e-300)),
+      color_key = case_when(
+        adj.P.Val &lt; 0.05 &amp; logFC &gt; 0  ~ &quot;Up&quot;,
+        adj.P.Val &lt; 0.05 &amp; logFC &lt; 0 ~ &quot;Down&quot;,
+        TRUE ~ &quot;NS&quot;
+      )
+    )
+
+  top_genes &lt;- volcano_colors %&gt;%
+  dplyr::arrange(adj.P.Val) %&gt;% 
+  dplyr::filter(adj.P.Val &lt; 0.05) %&gt;% 
+  slice_head(n = 20)
+  
+  gene_counts &lt;- volcano_colors %&gt;%
+    dplyr::summarise(
+      Up = sum(color_key == &quot;Up&quot;),
+      Down = sum(color_key == &quot;Down&quot;),
+      NS = sum(color_key == &quot;NS&quot;)
+    )
+  
+  # genes_of_interest &lt;- volcano_colors %&gt;%
+  #   dplyr::filter(id_label %in% c(&quot;ASPHD2&quot;, &quot;C1R&quot;, &quot;PARP12&quot;, &quot;GBP2&quot;, &quot;TNFSF13B&quot;, &quot;TUBB&quot;, &quot;GRAMD2A&quot;, &quot;FAM107A&quot;, &quot;ZCWPW2&quot;, &quot;TRIB1&quot;, &quot;C1S&quot;, &quot;CD47&quot;, &quot;SFT2D2&quot;, &quot;CIBAR1&quot;, &quot;IFITM2&quot;, &quot;TESK2&quot;, &quot;STAMBPL&quot;, &quot;NUP58&quot;, &quot;BPGM&quot;, &quot;CIMAP3&quot;, &quot;CD9&quot;, &quot;CFH&quot;, &quot;SLC35A4&quot;, &quot;ENSG00000284048&quot;, &quot;UST&quot;, &quot;A2M&quot;, &quot;CACHD1&quot;, &quot;VPS13C&quot;, &quot;FBXO31&quot;, &quot;NORAD&quot;))
+
+  p &lt;- ggplot(
+    volcano_colors,
+    aes(x = logFC, y = neglog10AdjP)
+    ) +
+    geom_point(
+      aes(color = color_key),
+      size = 2,
+      alpha = 0.6
+    ) +
+    
+   # coord_cartesian(
+   #    xlim = c(-12, 12),
+   #    ylim = c(0, 20)
+   #  ) +
+    
+    # geom_vline(
+    # xintercept = c(-1,1),
+    # linetype = &quot;dashed&quot;
+    # ) +
+    # geom_hline(
+    # yintercept = -log10(0.05),
+    # linetype = &quot;dashed&quot;
+    # ) +
+    
+    geom_text_repel(
+      data = top_genes,
+      aes(label = id_label),
+      size = 3,
+      max.overlaps = Inf,
+      box.padding = 0.5
+    ) +
+
+    scale_color_manual(
+      name = NULL,
+      values = c(
+        &quot;Up&quot; = &quot;red&quot;,
+        &quot;Down&quot; = &quot;blue&quot;,
+        &quot;NS&quot; = &quot;grey50&quot;
+      ),
+      labels = c(
+        &quot;Up&quot; = paste0(&quot;Up (n = &quot;, gene_counts$Up, &quot;)&quot;),
+        &quot;Down&quot; = paste0(&quot;Down (n = &quot;, gene_counts$Down, &quot;)&quot;),
+        &quot;NS&quot; = paste0(&quot;NS (n = &quot;, gene_counts$NS, &quot;)&quot;)
+        )
+      ) +
+      
+      labs(
+        title = list_name,
+        x = &quot;log2FC&quot;,
+        y = &quot;-log10(Adj.P-value)&quot;
+      ) +
+    
+      theme_classic(
+      ) +
+      
+      theme(
+        plot.title = element_text(
+          hjust = 0.6,
+          size = 16,
+          face = &quot;bold&quot;
+        ),
+        text = element_text(
+          size = 12
+        )
+      ) 
+          
+      list(
+        plot = p,
+        top = top_genes,
+        counts = gene_counts
+        #interesting_genes = genes_of_interest
+        )
+}
+
+for (i in seq_along(PHTO_toptable_results)) {
+
+  results &lt;- generate_volcano_plot(
+    PHTO_toptable_results[[i]],
+    PHTO_toptable_list[[i]]
+  )
+## The code below gives written summaries in the console
+  cat(
+    &quot;\n&quot;,
+    PHTO_toptable_list[[i]],
+    &quot;: Up =&quot;, results$counts$Up,
+    &quot;| Down =&quot;, results$counts$Down,
+    &quot;\n&quot;
+  )
+
+  print(results$plot) #This prints the plots
+}</code></pre>
+<pre><code>
+ HvC_H2O : Up = 2712 | Down = 2612 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-1.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ C_DMSOvH2O : Up = 0 | Down = 0 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-2.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ H_DMSOvH2O : Up = 0 | Down = 0 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-3.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ HvC_DMSO : Up = 2573 | Down = 2514 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-4.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ Int_DMSO : Up = 0 | Down = 0 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-5.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ C_TNFavH2O : Up = 128 | Down = 4 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-6.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ H_TNFavH2O : Up = 41 | Down = 0 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-7.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ HvC_TNFa : Up = 2660 | Down = 2487 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-8.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ Int_TNFa : Up = 0 | Down = 0 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-9.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ C_LPSvH2O : Up = 13 | Down = 0 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-10.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ H_LPSvH2O : Up = 1 | Down = 0 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-11.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ HvC_LPS : Up = 2842 | Down = 2673 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-12.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ Int_LPS : Up = 0 | Down = 0 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-13.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ HvC_DOX : Up = 2849 | Down = 2467 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-14.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ C_DOXvDMSO : Up = 4388 | Down = 4986 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-15.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ H_DOXvDMSO : Up = 4296 | Down = 4735 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-16.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ Int_DOX : Up = 879 | Down = 659 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-17.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ HvC_NUTL : Up = 2698 | Down = 2739 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-18.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ C_NUTLvDMSO : Up = 586 | Down = 526 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-19.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ H_NUTLvDMSO : Up = 518 | Down = 651 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-20.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ Int_NUTL : Up = 1 | Down = 1 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-21.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ HvC_TUN : Up = 2588 | Down = 2448 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-22.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ C_TUNvDMSO : Up = 1722 | Down = 1818 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-23.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ H_TUNvDMSO : Up = 1760 | Down = 1746 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-24.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ Int_TUN : Up = 19 | Down = 7 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-25.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ HvC_THA : Up = 2592 | Down = 2526 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-26.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ C_THAvDMSO : Up = 2136 | Down = 2471 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-27.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ H_THAvDMSO : Up = 1928 | Down = 2329 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-28.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+ Int_THA : Up = 26 | Down = 18 </code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/Volcano%20Plots%20comparing%20treatment%20conditions%20within%20the%20same%20species%20using%20limma-29.png" alt="" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="scatter-plots" class="section level2">
+<h2>Scatter plots</h2>
+<pre class="r"><code>plot_species_fc &lt;- function(
+    toptable_list,
+    human_coef,
+    chimp_coef,
+    interaction_coef,
+    lookup_table,
+    treatment,
+    control,
+    genes_to_label = NULL,
+    bold_genes = NULL,
+    interaction_fdr = 0.05,
+    x_limits = NULL,
+    y_limits = NULL
+) {
+  
+  # ---------------------------------------------------------
+  # 1. Extract Human logFC
+  # ---------------------------------------------------------
+  
+  human_fc &lt;- toptable_list[[human_coef]] %&gt;%
+    tibble::rownames_to_column(&quot;Ensembl&quot;) %&gt;%
+    dplyr::select(Ensembl, logFC) %&gt;%
+    dplyr::rename(Human_logFC = logFC)
+  
+  
+  # ---------------------------------------------------------
+  # 2. Extract Chimp logFC
+  # ---------------------------------------------------------
+  
+  chimp_fc &lt;- toptable_list[[chimp_coef]] %&gt;%
+    tibble::rownames_to_column(&quot;Ensembl&quot;) %&gt;%
+    dplyr::select(Ensembl, logFC) %&gt;%
+    dplyr::rename(Chimp_logFC = logFC)
+  
+  
+  # ---------------------------------------------------------
+  # 3. Combine Human and Chimp logFC
+  # ---------------------------------------------------------
+  
+  fc_df &lt;- human_fc %&gt;%
+    dplyr::inner_join(
+      chimp_fc,
+      by = &quot;Ensembl&quot;
+    ) %&gt;%
+    dplyr::left_join(
+      lookup_table %&gt;%
+        dplyr::select(
+          Ensembl,
+          Symbol
+        ),
+      by = &quot;Ensembl&quot;
+    ) %&gt;%
+    dplyr::mutate(
+      Symbol = dplyr::if_else(
+        is.na(Symbol),
+        Ensembl,
+        Symbol
+      )
+    )
+  
+  
+  # ---------------------------------------------------------
+  # 4. Identify significant interaction genes
+  # ---------------------------------------------------------
+  
+  interaction_sig_genes &lt;- toptable_list[[interaction_coef]] %&gt;%
+    tibble::rownames_to_column(&quot;Ensembl&quot;) %&gt;%
+    dplyr::filter(adj.P.Val &lt; interaction_fdr) %&gt;%
+    dplyr::pull(Ensembl)
+  
+  
+  # ---------------------------------------------------------
+  # 5. Determine direction of response
+  # ---------------------------------------------------------
+  
+  interaction_df &lt;- fc_df %&gt;%
+    dplyr::filter(
+      Ensembl %in% interaction_sig_genes
+    ) %&gt;%
+    dplyr::mutate(
+      Direction = dplyr::case_when(
+        Human_logFC &gt; 0 &amp; Chimp_logFC &gt; 0 ~ &quot;Human ↑, Chimp ↑&quot;,
+        Human_logFC &lt; 0 &amp; Chimp_logFC &lt; 0 ~ &quot;Human ↓, Chimp ↓&quot;,
+        Human_logFC &gt; 0 &amp; Chimp_logFC &lt; 0 ~ &quot;Human ↑, Chimp ↓&quot;,
+        Human_logFC &lt; 0 &amp; Chimp_logFC &gt; 0 ~ &quot;Human ↓, Chimp ↑&quot;,
+        TRUE ~ &quot;Zero/NA&quot;
+      )
+    )
+  
+  
+  # ---------------------------------------------------------
+  # 6. Count interaction directions
+  # ---------------------------------------------------------
+  
+  direction_counts &lt;- interaction_df %&gt;%
+    dplyr::count(Direction)
+  
+  
+  # ---------------------------------------------------------
+  # 7. Select genes to label
+  # ---------------------------------------------------------
+  
+  if (!is.null(genes_to_label)) {
+    
+    label_df &lt;- fc_df %&gt;%
+      dplyr::filter(
+        Symbol %in% genes_to_label
+      )
+    
+  } else {
+    
+    label_df &lt;- fc_df[0, ]
+    
+  }
+  
+  
+  # ---------------------------------------------------------
+  # 8. Number of significant interaction genes
+  # ---------------------------------------------------------
+  
+  n_interaction &lt;- nrow(interaction_df)
+  
+  # ---------------------------------------------------------
+  # 9. Calculate Pearson correlation and p-value
+  # ---------------------------------------------------------
+  
+  # Remove missing values before correlation test
+  cor_df &lt;- fc_df %&gt;%
+    dplyr::filter(
+      !is.na(Human_logFC),
+      !is.na(Chimp_logFC)
+    )
+  
+  # Pearson correlation test
+  cor_test &lt;- stats::cor.test(
+    cor_df$Human_logFC,
+    cor_df$Chimp_logFC,
+    method = &quot;pearson&quot;
+  )
+  
+  # Extract Pearson r
+  pearson_r &lt;- unname(
+    cor_test$estimate
+  )
+  
+  # Extract p-value
+  pearson_p &lt;- cor_test$p.value
+  
+  
+  # Format p-value for figure
+  pearson_p_label &lt;- ifelse(
+    pearson_p &lt; 0.001,
+    &quot;p &lt; 0.001&quot;,
+    paste0(
+      &quot;p = &quot;,
+      sprintf(&quot;%.3f&quot;, pearson_p)
+    )
+  )
+  
+  
+  # Create label for figure
+  cor_label &lt;- paste0(
+    &quot;Pearson r = &quot;,
+    sprintf(&quot;%.2f&quot;, pearson_r),
+    &quot;\n&quot;,
+    pearson_p_label
+  )
+  
+  # ---------------------------------------------------------
+  # 10. Create plot
+  # ---------------------------------------------------------
+  
+  p &lt;- ggplot2::ggplot(
+    fc_df,
+    ggplot2::aes(
+      x = Human_logFC,
+      y = Chimp_logFC
+    )
+  ) +
+    
+    ggplot2::geom_point(
+      color = &quot;grey47&quot;,
+      alpha = 0.6,
+      size = 1
+    ) +
+    
+    ggplot2::geom_point(
+      data = interaction_df %&gt;%
+        dplyr::filter(Direction != &quot;Zero/NA&quot;),
+      ggplot2::aes(color = Direction),
+      size = 1.5
+    ) +
+    
+    ggrepel::geom_text_repel(
+      data = label_df,
+      ggplot2::aes(
+        label = Symbol,
+        fontface = ifelse(
+          Symbol %in% bold_genes,
+          &quot;bold.italic&quot;,
+          &quot;plain&quot;
+        )
+      ),
+      size = 3,
+      max.overlaps = Inf,
+      box.padding = 2,
+      point.padding = 0.15,
+      force = 2
+    ) +
+    
+    ggplot2::scale_colour_manual(
+      values = c(
+        &quot;Human ↑, Chimp ↑&quot; = &quot;maroon&quot;,
+        &quot;Human ↓, Chimp ↓&quot; = &quot;dodgerblue4&quot;,
+        &quot;Human ↑, Chimp ↓&quot; = &quot;purple3&quot;,
+        &quot;Human ↓, Chimp ↑&quot; = &quot;green4&quot;
+      )
+    ) +
+    
+    ggplot2::geom_vline(
+      xintercept = 0,
+      linetype = &quot;dashed&quot;
+    ) +
+    
+    ggplot2::geom_hline(
+      yintercept = 0,
+      linetype = &quot;dashed&quot;
+    ) +
+    
+    # Pearson r and p-value
+    ggplot2::annotate(
+      &quot;text&quot;,
+      x = Inf,
+      y = Inf,
+      label = cor_label,
+      hjust = 1.1,
+      vjust = 1.3,
+      size = 3
+    ) +
+    
+    ggplot2::theme_classic() +
+    
+    ggplot2::labs(
+      x = paste0(
+        &quot;Human &quot;,
+        treatment,
+        &quot; vs &quot;,
+        control,
+        &quot; logFC&quot;
+      ),
+      y = paste0(
+        &quot;Chimp &quot;,
+        treatment,
+        &quot; vs &quot;,
+        control,
+        &quot; logFC&quot;
+      ),
+      title = paste0(
+        &quot;Cross-species &quot;,
+        treatment,
+        &quot; response correlation&quot;
+      ),
+      color = paste0(
+        &quot;Interaction Gene\nDirections (n = &quot;,
+        n_interaction,
+        &quot;)&quot;
+      )
+    ) +
+    
+    ggplot2::theme(
+      legend.position = c(0.15, 0.80)
+    )
+  
+  # ---------------------------------------------------------
+  # 11. Optional axis limits
+  # ---------------------------------------------------------
+  
+  if (!is.null(x_limits) | !is.null(y_limits)) {
+    
+    p &lt;- p +
+      ggplot2::coord_cartesian(
+        xlim = x_limits,
+        ylim = y_limits
+      )
+  }
+  
+  
+  # ---------------------------------------------------------
+  # 12. Return everything
+  # ---------------------------------------------------------
+  
+  return(
+    list(
+      plot = p,
+      fc_df = fc_df,
+      interaction_df = interaction_df,
+      direction_counts = direction_counts,
+      n_interaction = n_interaction,
+      pearson_r = pearson_r,
+      pearson_p = pearson_p
+    )
+  )
+}</code></pre>
+<pre class="r"><code>comparison_table &lt;- tibble::tribble(
+  ~treatment, ~control, ~human_coef,       ~chimp_coef,       ~interaction_coef,
+  
+  &quot;TNFa&quot;,     &quot;H2O&quot;,    &quot;H_TNFavH2O&quot;,     &quot;C_TNFavH2O&quot;,     &quot;Int_TNFa&quot;,
+  &quot;LPS&quot;,      &quot;H2O&quot;,    &quot;H_LPSvH2O&quot;,      &quot;C_LPSvH2O&quot;,      &quot;Int_LPS&quot;,
+  &quot;DOX&quot;,      &quot;DMSO&quot;,   &quot;H_DOXvDMSO&quot;,     &quot;C_DOXvDMSO&quot;,     &quot;Int_DOX&quot;,
+  &quot;NUTL&quot;,     &quot;DMSO&quot;,   &quot;H_NUTLvDMSO&quot;,    &quot;C_NUTLvDMSO&quot;,    &quot;Int_NUTL&quot;,
+  &quot;TUN&quot;,      &quot;DMSO&quot;,   &quot;H_TUNvDMSO&quot;,     &quot;C_TUNvDMSO&quot;,     &quot;Int_TUN&quot;,
+  &quot;THA&quot;,      &quot;DMSO&quot;,   &quot;H_THAvDMSO&quot;,     &quot;C_THAvDMSO&quot;,     &quot;Int_THA&quot;
+)
+
+comparison_table</code></pre>
+<pre><code># A tibble: 6 × 5
+  treatment control human_coef  chimp_coef  interaction_coef
+  &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;           
+1 TNFa      H2O     H_TNFavH2O  C_TNFavH2O  Int_TNFa        
+2 LPS       H2O     H_LPSvH2O   C_LPSvH2O   Int_LPS         
+3 DOX       DMSO    H_DOXvDMSO  C_DOXvDMSO  Int_DOX         
+4 NUTL      DMSO    H_NUTLvDMSO C_NUTLvDMSO Int_NUTL        
+5 TUN       DMSO    H_TUNvDMSO  C_TUNvDMSO  Int_TUN         
+6 THA       DMSO    H_THAvDMSO  C_THAvDMSO  Int_THA         </code></pre>
+<pre class="r"><code>plot_all_species_fc &lt;- function(
+    toptable_list,
+    comparison_table,
+    lookup_table,
+    genes_to_label = NULL,
+    bold_genes = NULL,
+    interaction_fdr = 0.05,
+    x_limits = NULL,
+    y_limits = NULL
+) {
+  
+  results &lt;- purrr::pmap(
+    
+    comparison_table,
+    
+    function(
+      treatment,
+      control,
+      human_coef,
+      chimp_coef,
+      interaction_coef
+    ) {
+      
+      plot_species_fc(
+        toptable_list = toptable_list,
+        human_coef = human_coef,
+        chimp_coef = chimp_coef,
+        interaction_coef = interaction_coef,
+        lookup_table = lookup_table,
+        treatment = treatment,
+        control = control,
+        genes_to_label = genes_to_label,
+        bold_genes = bold_genes,
+        interaction_fdr = interaction_fdr,
+        x_limits = x_limits,
+        y_limits = y_limits
+      )
+      
+    }
+  )
+  
+  
+  # Name each result according to treatment
+  
+  names(results) &lt;- comparison_table$treatment
+  
+  
+  return(results)
+}</code></pre>
+<pre class="r"><code>PHTO_fc_results &lt;- plot_all_species_fc(
+  toptable_list = PHTO_toptable_results,
+  comparison_table = comparison_table,
+  lookup_table = PHTO_lookup_table,
+  interaction_fdr = 0.05
+)
+
+PHTO_fc_results$TUN$plot</code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>purrr::walk(
+  PHTO_fc_results,
+  ~ print(.x$plot)
+)</code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-2.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-3.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-4.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-5.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-6.png" alt="" width="672" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-18-7.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>interaction_summary &lt;- purrr::imap_dfr(
+  PHTO_fc_results,
+  function(x, treatment) {
+    
+    x$direction_counts %&gt;%
+      dplyr::mutate(
+        Treatment = treatment,
+        Total_Interaction_Genes = x$n_interaction
+      )
+    
+  }
+) %&gt;%
+  dplyr::select(
+    Treatment,
+    Direction,
+    n,
+    Total_Interaction_Genes
+  )
+
+interaction_summary</code></pre>
+<pre><code>   Treatment        Direction   n Total_Interaction_Genes
+1        DOX Human ↑, Chimp ↑ 470                    1538
+2        DOX Human ↑, Chimp ↓ 362                    1538
+3        DOX Human ↓, Chimp ↑ 238                    1538
+4        DOX Human ↓, Chimp ↓ 468                    1538
+5       NUTL Human ↑, Chimp ↓   1                       2
+6       NUTL Human ↓, Chimp ↑   1                       2
+7        TUN Human ↑, Chimp ↑   9                      26
+8        TUN Human ↑, Chimp ↓  14                      26
+9        TUN Human ↓, Chimp ↑   3                      26
+10       THA Human ↑, Chimp ↑  14                      44
+11       THA Human ↑, Chimp ↓  19                      44
+12       THA Human ↓, Chimp ↑   9                      44
+13       THA Human ↓, Chimp ↓   2                      44</code></pre>
+<pre class="r"><code>PHTO_pearson_summary &lt;- purrr::imap_dfr(
+  PHTO_fc_results,
+  function(result, treatment) {
+    
+    tibble::tibble(
+      Treatment = treatment,
+      Pearson_r = result$pearson_r,
+      Pearson_p = result$pearson_p
+    )
+  }
+)
+
+PHTO_pearson_summary</code></pre>
+<pre><code># A tibble: 6 × 3
+  Treatment Pearson_r Pearson_p
+  &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;
+1 TNFa          0.660 0        
+2 LPS           0.193 9.53e-119
+3 DOX           0.873 0        
+4 NUTL          0.843 0        
+5 TUN           0.848 0        
+6 THA           0.866 0        </code></pre>
+</div>
+<div id="significant-interaction-gene-column-charts"
+class="section level2">
+<h2>Significant Interaction Gene Column Charts</h2>
+<pre class="r"><code>plot_interaction_direction_counts &lt;- function(
+    result,
+    treatment,
+    y_limits = NULL,
+    y_breaks = NULL
+) {
+  
+  # ---------------------------------------------------------
+  # 1. Count interaction gene directions
+  # ---------------------------------------------------------
+  
+  interaction_counts &lt;- result$interaction_df %&gt;%
+    dplyr::filter(Direction != &quot;Zero/NA&quot;) %&gt;%
+    dplyr::mutate(
+      
+      Direction_group = dplyr::case_when(
+        
+        Direction %in% c(
+          &quot;Human ↑, Chimp ↑&quot;,
+          &quot;Human ↓, Chimp ↓&quot;
+        ) ~ &quot;Same Direction&quot;,
+        
+        Direction %in% c(
+          &quot;Human ↑, Chimp ↓&quot;,
+          &quot;Human ↓, Chimp ↑&quot;
+        ) ~ &quot;Opposite Direction&quot;,
+        
+        TRUE ~ NA_character_
+      )
+    ) %&gt;%
+    dplyr::filter(!is.na(Direction_group)) %&gt;%
+    dplyr::count(
+      Direction_group,
+      Direction
+    )
+  
+  
+  # ---------------------------------------------------------
+  # 2. Calculate total genes in each group
+  # ---------------------------------------------------------
+  
+  x_labels &lt;- interaction_counts %&gt;%
+    dplyr::group_by(Direction_group) %&gt;%
+    dplyr::summarise(
+      total = sum(n),
+      .groups = &quot;drop&quot;
+    )
+  
+  
+  # ---------------------------------------------------------
+  # 3. Create labels
+  # ---------------------------------------------------------
+  
+  same_n &lt;- x_labels %&gt;%
+    dplyr::filter(Direction_group == &quot;Same Direction&quot;) %&gt;%
+    dplyr::pull(total)
+  
+  opposite_n &lt;- x_labels %&gt;%
+    dplyr::filter(Direction_group == &quot;Opposite Direction&quot;) %&gt;%
+    dplyr::pull(total)
+  
+  
+  # If one category contains zero genes
+  if (length(same_n) == 0) {
+    same_n &lt;- 0
+  }
+  
+  if (length(opposite_n) == 0) {
+    opposite_n &lt;- 0
+  }
+  
+  
+  # ---------------------------------------------------------
+  # 4. Create plot
+  # ---------------------------------------------------------
+  
+  p &lt;- ggplot2::ggplot(
+    interaction_counts,
+    ggplot2::aes(
+      x = Direction_group,
+      y = n,
+      fill = Direction
+    )
+  ) +
+    
+    ggplot2::geom_col() +
+    
+    ggplot2::geom_text(
+      ggplot2::aes(label = n),
+      position = ggplot2::position_stack(vjust = 0.5),
+      fontface = &quot;bold&quot;,
+      color = &quot;white&quot;,
+      size = 6
+    ) +
+    
+    ggplot2::scale_x_discrete(
+      limits = c(
+        &quot;Same Direction&quot;,
+        &quot;Opposite Direction&quot;
+      ),
+      labels = c(
+        
+        &quot;Same Direction&quot; = paste0(
+          &quot;Same Direction\n(n = &quot;,
+          same_n,
+          &quot;)&quot;
+        ),
+        
+        &quot;Opposite Direction&quot; = paste0(
+          &quot;Opposite Direction\n(n = &quot;,
+          opposite_n,
+          &quot;)&quot;
+        )
+      )
+    ) +
+    
+    ggplot2::scale_fill_manual(
+      values = c(
+        &quot;Human ↑, Chimp ↑&quot; = &quot;maroon&quot;,
+        &quot;Human ↓, Chimp ↓&quot; = &quot;dodgerblue4&quot;,
+        &quot;Human ↑, Chimp ↓&quot; = &quot;purple3&quot;,
+        &quot;Human ↓, Chimp ↑&quot; = &quot;green4&quot;
+      ),
+      drop = FALSE
+    ) +
+    
+    ggplot2::labs(
+      x = NULL,
+      y = &quot;Number of DEGs&quot;,
+      title = paste0(
+        treatment,
+        &quot; significant interaction genes&quot;
+      ),
+      fill = NULL
+    ) +
+    
+    ggplot2::coord_flip() +
+    
+    ggplot2::theme_classic() +
+    
+    ggplot2::theme(
+      
+      axis.title.x = ggplot2::element_text(
+        size = 24,
+        face = &quot;bold&quot;
+      ),
+      
+      axis.title.y = ggplot2::element_text(
+        size = 24,
+        face = &quot;bold&quot;
+      ),
+      
+      axis.text.x = ggplot2::element_text(
+        size = 20,
+        face = &quot;bold&quot;
+      ),
+      
+      axis.text.y = ggplot2::element_text(
+        size = 20,
+        face = &quot;bold&quot;
+      ),
+      
+      plot.title = ggplot2::element_text(
+        size = 22,
+        face = &quot;bold&quot;,
+        hjust = 0.5
+      )
+    )
+  
+  
+  # ---------------------------------------------------------
+  # 5. Optional y-axis settings
+  # ---------------------------------------------------------
+  
+  if (!is.null(y_limits) | !is.null(y_breaks)) {
+    
+    p &lt;- p +
+      ggplot2::scale_y_continuous(
+        limits = y_limits,
+        breaks = y_breaks
+      )
+  }
+  
+  
+  # ---------------------------------------------------------
+  # 6. Return plot AND data
+  # ---------------------------------------------------------
+  
+  return(
+    list(
+      plot = p,
+      interaction_counts = interaction_counts,
+      group_totals = x_labels
+    )
+  )
+}</code></pre>
+<pre class="r"><code>TNFa_direction_result &lt;- plot_interaction_direction_counts(
+  result = PHTO_fc_results$TNFa,
+  treatment = &quot;TNFα&quot;
+)
+TNFa_direction_result$plot</code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>TNFa_direction_result$interaction_counts</code></pre>
+<pre><code>[1] Direction_group Direction       n              
+&lt;0 rows&gt; (or 0-length row.names)</code></pre>
+<pre class="r"><code>TNFa_direction_result$group_totals</code></pre>
+<pre><code># A tibble: 0 × 2
+# ℹ 2 variables: Direction_group &lt;chr&gt;, total &lt;int&gt;</code></pre>
+<pre class="r"><code>plot_all_interaction_directions &lt;- function(
+    PHTO_fc_results,
+    y_limits = NULL,
+    y_breaks = NULL
+) {
+  
+  treatment_labels &lt;- c(
+    &quot;TNFa&quot; = &quot;TNFα&quot;,
+    &quot;LPS&quot;  = &quot;LPS&quot;,
+    &quot;DOX&quot;  = &quot;DOX&quot;,
+    &quot;NUTL&quot; = &quot;NUTL&quot;,
+    &quot;TUN&quot;  = &quot;TUN&quot;,
+    &quot;THA&quot;  = &quot;THA&quot;
+  )
+  
+  
+  results &lt;- purrr::imap(
+    PHTO_fc_results,
+    
+    function(result, treatment_name) {
+      
+      plot_interaction_direction_counts(
+        result = result,
+        treatment = treatment_labels[[treatment_name]],
+        y_limits = y_limits,
+        y_breaks = y_breaks
+      )
+      
+    }
+  )
+  
+  
+  return(results)
+}
+
+PHTO_direction_results &lt;- plot_all_interaction_directions(
+  PHTO_fc_results
+  # ,
+  # y_limits = c(0, 1000),
+  # y_breaks = seq(0, 1000, by = 250)
+)
+
+PHTO_direction_results$TNFa$plot</code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-2.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>PHTO_direction_results$LPS$plot</code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-3.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>PHTO_direction_results$TUN$plot</code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-4.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>PHTO_direction_results$THA$plot</code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-5.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>PHTO_direction_results$NUTL$plot</code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-6.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>PHTO_direction_results$DOX$plot</code></pre>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-20-7.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>PHTO_direction_summary &lt;- purrr::imap_dfr(
+  PHTO_direction_results,
+  
+  function(result, treatment) {
+    
+    result$interaction_counts %&gt;%
+      dplyr::mutate(
+        Treatment = treatment
+      )
+    
+  }
+) %&gt;%
+  dplyr::select(
+    Treatment,
+    Direction_group,
+    Direction,
+    n
+  )
+
+PHTO_direction_summary &lt;- PHTO_direction_summary %&gt;%
+  dplyr::group_by(Treatment) %&gt;%
+  dplyr::mutate(
+    Total = sum(n),
+    Percent = 100 * n / Total
+  ) %&gt;%
+  dplyr::ungroup()
+
+PHTO_direction_summary</code></pre>
+<pre><code># A tibble: 13 × 6
+   Treatment Direction_group    Direction            n Total Percent
+   &lt;chr&gt;     &lt;chr&gt;              &lt;chr&gt;            &lt;int&gt; &lt;int&gt;   &lt;dbl&gt;
+ 1 DOX       Opposite Direction Human ↑, Chimp ↓   362  1538   23.5 
+ 2 DOX       Opposite Direction Human ↓, Chimp ↑   238  1538   15.5 
+ 3 DOX       Same Direction     Human ↑, Chimp ↑   470  1538   30.6 
+ 4 DOX       Same Direction     Human ↓, Chimp ↓   468  1538   30.4 
+ 5 NUTL      Opposite Direction Human ↑, Chimp ↓     1     2   50   
+ 6 NUTL      Opposite Direction Human ↓, Chimp ↑     1     2   50   
+ 7 TUN       Opposite Direction Human ↑, Chimp ↓    14    26   53.8 
+ 8 TUN       Opposite Direction Human ↓, Chimp ↑     3    26   11.5 
+ 9 TUN       Same Direction     Human ↑, Chimp ↑     9    26   34.6 
+10 THA       Opposite Direction Human ↑, Chimp ↓    19    44   43.2 
+11 THA       Opposite Direction Human ↓, Chimp ↑     9    44   20.5 
+12 THA       Same Direction     Human ↑, Chimp ↑    14    44   31.8 
+13 THA       Same Direction     Human ↓, Chimp ↓     2    44    4.55</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.6.1 (2026-06-24 ucrt)
+Platform: x86_64-w64-mingw32/x64
+Running under: Windows 11 x64 (build 26200)
+
+Matrix products: default
+  LAPACK version 3.12.1
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+time zone: America/Chicago
+tzcode source: internal
+
+attached base packages:
+[1] stats4    grid      stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] plotrix_3.8-14         GO.db_3.23.1           gprofiler2_0.2.4      
+ [4] circlize_0.4.18        clusterProfiler_4.20.0 enrichplot_1.32.0     
+ [7] org.Hs.eg.db_3.23.1    AnnotationDbi_1.74.0   IRanges_2.46.0        
+[10] S4Vectors_0.50.1       Biobase_2.72.0         BiocGenerics_0.58.1   
+[13] generics_0.1.4         ggVennDiagram_1.5.7    ggrepel_0.9.8         
+[16] gridExtra_2.3          RColorBrewer_1.1-3     ComplexHeatmap_2.25.3 
+[19] ggpubr_0.6.3           smplot2_0.2.6          edgeR_4.10.0          
+[22] limma_3.68.2           cowplot_1.2.0          scales_1.4.0          
+[25] lubridate_1.9.5        forcats_1.0.1          stringr_1.6.0         
+[28] dplyr_1.2.1            purrr_1.2.2            readr_2.2.0           
+[31] tidyr_1.3.2            tibble_3.3.1           ggplot2_4.0.3         
+[34] tidyverse_2.0.0        workflowr_1.7.2       
+
+loaded via a namespace (and not attached):
+  [1] splines_4.6.1           later_1.4.8             ggplotify_0.1.3        
+  [4] polyclip_1.10-7         enrichit_0.1.5          rpart_4.1.27           
+  [7] httr2_1.2.3             lifecycle_1.0.5         rstatix_1.0.0          
+ [10] doParallel_1.0.17       rprojroot_2.1.1         processx_3.9.0         
+ [13] lattice_0.22-9          MASS_7.3-65             backports_1.5.1        
+ [16] magrittr_2.0.5          plotly_4.12.0           Hmisc_5.2-5            
+ [19] sass_0.4.10             rmarkdown_2.31          jquerylib_0.1.4        
+ [22] yaml_2.3.12             httpuv_1.6.17           otel_0.2.0             
+ [25] ggtangle_0.1.2          DBI_1.3.0               abind_1.4-8            
+ [28] yulab.utils_0.2.4       nnet_7.3-20             tweenr_2.0.3           
+ [31] rappdirs_0.3.4          aisdk_1.4.12            git2r_0.36.2           
+ [34] gdtools_0.5.1           tidytree_0.4.8          codetools_0.2-20       
+ [37] DOSE_4.6.0              ggforce_0.5.0           tidyselect_1.2.1       
+ [40] shape_1.4.6.1           aplot_0.3.1             farver_2.1.2           
+ [43] matrixStats_1.5.0       base64enc_0.1-6         Seqinfo_1.2.0          
+ [46] jsonlite_2.0.0          GetoptLong_1.1.1        Formula_1.2-5          
+ [49] iterators_1.0.14        systemfonts_1.3.2       foreach_1.5.2          
+ [52] tools_4.6.1             ggnewscale_0.5.2        treeio_1.36.1          
+ [55] Rcpp_1.1.1-1.1          glue_1.8.1              xfun_0.57              
+ [58] qvalue_2.44.0           withr_3.0.3             fastmap_1.2.0          
+ [61] callr_3.8.0             digest_0.6.39           timechange_0.4.0       
+ [64] R6_2.6.1                gridGraphics_0.5-1      colorspace_2.1-2       
+ [67] RSQLite_3.52.0          utf8_1.2.6              fontLiberation_0.1.0   
+ [70] data.table_1.18.4       httr_1.4.8              htmlwidgets_1.6.4      
+ [73] scatterpie_0.2.6        whisker_0.4.1           pkgconfig_2.0.3        
+ [76] gtable_0.3.6            blob_1.3.0              S7_0.2.2               
+ [79] XVector_0.52.0          htmltools_0.5.9         fontBitstreamVera_0.1.1
+ [82] carData_3.0-6           pwr_1.3-0               clue_0.3-68            
+ [85] png_0.1-9               ggfun_0.2.1             knitr_1.51             
+ [88] rstudioapi_0.19.0       tzdb_0.5.0              reshape2_1.4.5         
+ [91] rjson_0.2.23            checkmate_2.3.4         nlme_3.1-169           
+ [94] cachem_1.1.0            zoo_1.8-15              GlobalOptions_0.1.4    
+ [97] parallel_4.6.1          foreign_0.8-91          pillar_1.11.1          
+[100] vctrs_0.7.3             promises_1.5.0          tidydr_0.0.6           
+[103] car_3.1-5               cluster_2.1.8.2         htmlTable_2.5.0        
+[106] evaluate_1.0.5          cli_3.6.6               locfit_1.5-9.12        
+[109] compiler_4.6.1          rlang_1.2.0             crayon_1.5.3           
+[112] ggsignif_0.6.4          labeling_0.4.3          getPass_0.2-4          
+[115] plyr_1.8.9              fs_2.1.0                ggiraph_0.9.6          
+[118] stringi_1.8.7           viridisLite_0.4.3       BiocParallel_1.46.0    
+[121] Biostrings_2.80.0       lazyeval_0.2.3          Matrix_1.7-5           
+[124] GOSemSim_2.38.0         fontquiver_0.2.1        hms_1.1.4              
+[127] patchwork_1.3.2         bit64_4.8.0             KEGGREST_1.52.2        
+[130] statmod_1.5.2           igraph_2.3.3            broom_1.0.13           
+[133] memoise_2.0.1           bslib_0.11.0            ggtree_4.2.0           
+[136] bit_4.6.0               gson_0.2.0              ape_5.8-1              </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
