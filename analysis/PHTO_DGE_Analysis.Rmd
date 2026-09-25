@@ -1,0 +1,2232 @@
+---
+title: "PHTO_DGE_Analysis"
+author: "Harsha Tamtam"
+date: "`r Sys.Date()`"
+output: html_document
+---
+```{r setup, include=FALSE}
+#this chuck is to setup defaults for basic settings of the webpage, note that this chunk is R language and the chunk below is CSS language
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	dev = c("png","pdf")
+)
+```
+
+```{css, echo=FALSE}
+pre {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+pre[class] {
+  max-height: 200px;
+}
+```
+
+
+## Introduction
+
+## Library Section
+```{r Libraries}
+library(tidyverse)
+library(dplyr)
+library(tibble)
+library(scales)
+library(cowplot)
+library(edgeR)
+library(smplot2)
+library(ggpubr)
+library(workflowr)
+library(ComplexHeatmap)
+library(RColorBrewer)
+library(gridExtra)
+library(ggrepel)
+library(ggVennDiagram)
+library(grid)
+library(ggrepel)
+library(org.Hs.eg.db)
+library(enrichplot)
+library(clusterProfiler)
+library(circlize)
+library(gprofiler2)
+library(stringr)
+library(readr)
+library(GO.db)
+library(AnnotationDbi)
+library(plotrix)
+```
+
+## File Calling
+```{r}
+PHTO_metadata <- readRDS("data/Emma_metadata_updated_all.RDS")
+PHTO_counts <- read.csv("data/Emma_counts_file.csv")
+
+working_counts_file <- PHTO_counts %>% 
+  as.data.frame() %>% 
+  rename(., Ensembl = gene_id) %>% 
+  pivot_longer(-Ensembl, names_to = "Samples", values_to = "raw_counts") %>% 
+  left_join(PHTO_metadata, by = c("Samples" = "Sample_ID")) %>% 
+  dplyr::filter(!Stimulus %in% c("EtOH", "PFOA", "BPA")) %>%
+  dplyr::filter(Time == 24) %>% 
+  dplyr::select(Ensembl, raw_counts, Final_sample_name) %>% 
+  pivot_wider(names_from = Final_sample_name, values_from = raw_counts) %>% 
+  column_to_rownames("Ensembl")
+
+working_metadata_file <- PHTO_metadata %>% 
+  dplyr::filter(!Stimulus %in% c("EtOH", "PFOA", "BPA")) %>%
+  dplyr::filter(Time == 24) %>% 
+  dplyr::mutate(
+    Grouping = case_when(
+      Species == "C" & Stimulus == "DMSO" ~ "Chimp_DMSO",
+      Species == "H" & Stimulus == "DMSO" ~ "Human_DMSO",
+      Species == "C" & Stimulus == "H2O" ~ "Chimp_H2O",
+      Species == "H" & Stimulus == "H2O" ~ "Human_H2O",
+      Species == "C" & Stimulus == "DOX" ~ "Chimp_DOX",
+      Species == "H" & Stimulus == "DOX" ~ "Human_DOX",
+      Species == "C" & Stimulus == "NUTL" ~ "Chimp_NUTL",
+      Species == "H" & Stimulus == "NUTL" ~ "Human_NUTL",
+      Species == "C" & Stimulus == "TUN" ~ "Chimp_TUN",
+      Species == "H" & Stimulus == "TUN" ~ "Human_TUN",
+      Species == "C" & Stimulus == "THA" ~ "Chimp_THA",
+      Species == "H" & Stimulus == "THA" ~ "Human_THA",
+      Species == "C" & Stimulus == "LPS" ~ "Chimp_LPS",
+      Species == "H" & Stimulus == "LPS" ~ "Human_LPS",
+      Species == "C" & Stimulus == "TNFa" ~ "Chimp_TNFa",
+      Species == "H" & Stimulus == "TNFa" ~ "Human_TNFa"
+  )
+)
+
+```
+
+## Converting to Log2 CPM and filtering rowMeans log2cpm > 0:
+```{r}
+log2cpm <- cpm(working_counts_file, log = TRUE)
+filtered_counts <- working_counts_file[rowMeans(log2cpm)> 0,]
+
+# dim(filtered_counts)
+# str(filtered_counts)
+```
+
+I will be ensuring my factors for the contrast matrices I will make are set correctly, but I need to make new data tables for each treatment type
+
+## Identifying DGEs for each Response Set (DDR, UPR, IMR)
+
+### DNA Damage Response (DDR) DGE, Voom, and Contrast Matrix Development
+
+#### Using model matrix (~ Species * Stimulus)
+```{r eval=FALSE, include=FALSE}
+# ----------------------------------------------------------------------------------------------------------------------------------------------------
+# I will be ensuring my factors for the contrast matrices I will make are set correctly, but I need to make new data tables for each treatment type
+# ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+# # DDR setup
+DDR_metadata <- working_metadata_file %>%
+  dplyr::filter(Stimulus %in% c("DMSO", "DOX", "NUTL"))
+
+DDR_counts <- filtered_counts %>%
+  dplyr::select(all_of(DDR_metadata$Final_sample_name))
+
+ncol(DDR_counts) # Run this with the line below to ensure that sample numbers match
+nrow(DDR_metadata) # Run this with the line above to ensure that sample numbers match
+
+DDR_counts <- DDR_counts[, DDR_metadata$Final_sample_name] # Run this to explicitly ensure sample ordering is identical between counts and metadata file
+
+# # Creating DDR-specific DGE list
+DDR_dge <- DGEList(
+  counts = DDR_counts
+)
+
+DDR_dge <- calcNormFactors(
+  DDR_dge,
+  method = "TMM"
+)
+
+# # Building the DDR design matrix
+DDR_metadata$Stimulus <- factor(
+  DDR_metadata$Stimulus,
+  levels = c("DMSO", "DOX", "NUTL")
+)
+
+DDR_metadata$Species <- relevel(
+  factor(DDR_metadata$Species),
+  ref = "C"
+)
+
+DDR_design <- model.matrix(
+  ~ Species * Stimulus,
+  data = DDR_metadata
+)
+
+# colnames(DDR_design)
+
+# Renaming columns to use underscores instead of default colons, colons will break the code
+colnames(DDR_design) <- c(
+  "Intercept",
+  "SpeciesH",
+  "StimulusDOX",                      
+  "StimulusNUTL",
+  "SpeciesH_StimulusDOX",
+  "SpeciesH_StimulusNUTL"
+)
+
+# Running Duplicate Correlations
+DDR_cor_fit <- duplicateCorrelation(object = DDR_dge$counts,
+                                design = DDR_design,
+                                block = DDR_metadata$Ind
+                                )
+
+DDR_voom_trend <- voom(DDR_dge,
+                   DDR_design,
+                   block = DDR_metadata$Ind, 
+                   correlation = DDR_cor_fit$consensus.correlation,
+                   plot = FALSE)
+
+
+# Fitting linear model
+DDR_fit <- lmFit(
+  DDR_voom_trend,
+  DDR_design,
+  block = DDR_metadata$Ind,
+  correlation = DDR_cor_fit$consensus.correlation
+)
+
+head(design)
+
+# Defining contrasts
+DDR_contrast_matrix <- makeContrasts(
+  Human_vs_Chimp_DMSO = SpeciesH,
+  Human_vs_Chimp_DOX = SpeciesH + SpeciesH_StimulusDOX,
+  Human_vs_Chimp_NUTL = SpeciesH + SpeciesH_StimulusNUTL,
+  Chimp_DOX_vs_DMSO = StimulusDOX,
+  Human_DOX_vs_DMSO = StimulusDOX + SpeciesH_StimulusDOX,
+  Chimp_NUTL_vs_DMSO = StimulusNUTL,
+  Human_NUTL_vs_DMSO = StimulusNUTL + SpeciesH_StimulusNUTL,
+  Interaction_DOX = SpeciesH_StimulusDOX,
+  Interaction_NUTL = SpeciesH_StimulusNUTL,
+  levels = DDR_design
+)
+
+# Applying contrasts across samples
+DDR_fit2 <- contrasts.fit(DDR_fit, DDR_contrast_matrix)
+DDR_efit2 <- eBayes(DDR_fit2)
+DDR_signif_gene_results = decideTests(DDR_efit2, adjust.method = "BH", p.value = 0.05)
+
+summary(DDR_signif_gene_results)
+plotSA(DDR_efit2, main = "Mean-variance DDR final model trend")
+
+```
+
+#### Using model matrix (~ 0 + Grouping)
+```{r eval=FALSE, include=FALSE}
+# ----------------------------------------------------------------------------------------------------------------------------------------------------
+# I will be ensuring my factors for the contrast matrices I will make are set correctly, but I need to make new data tables for each treatment type
+# ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+# # DDR setup
+DDR_metadata <- working_metadata_file %>%
+  dplyr::filter(Stimulus %in% c("DMSO", "DOX", "NUTL"))
+
+DDR_counts <- filtered_counts %>%
+  dplyr::select(all_of(DDR_metadata$Final_sample_name))
+
+ncol(DDR_counts) # Run this with the line below to ensure that sample numbers match
+nrow(DDR_metadata) # Run this with the line above to ensure that sample numbers match
+
+DDR_counts <- DDR_counts[, DDR_metadata$Final_sample_name] # Run this to explicitly ensure sample ordering is identical between counts and metadata file
+
+# # Creating DDR-specific DGE list
+DDR_dge <- DGEList(
+  counts = DDR_counts
+)
+
+DDR_dge <- calcNormFactors(
+  DDR_dge,
+  method = "TMM"
+)
+
+# # Building the DDR design matrix
+DDR_metadata$Stimulus <- factor(
+  DDR_metadata$Stimulus,
+  levels = c("DMSO", "DOX", "NUTL")
+)
+
+DDR_metadata$Species <- relevel(
+  factor(DDR_metadata$Species),
+  ref = "C"
+)
+
+DDR_design <- model.matrix(
+  ~ Species + Stimulus + Species:Stimulus,
+  data = DDR_metadata
+)
+
+colnames(DDR_design)
+```
+
+
+
+#### Using model matrix (~ 0 + Species:Stimulus)
+```{r eval=FALSE, include=FALSE}
+# ----------------------------------------------------------------------------------------------------------------------------------------------------
+# I will be ensuring my factors for the contrast matrices I will make are set correctly, but I need to make new data tables for each treatment type
+# ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+# # DDR setup
+DDR_metadata <- working_metadata_file %>%
+  dplyr::filter(Stimulus %in% c("DMSO", "DOX", "NUTL"))
+
+DDR_counts <- filtered_counts %>%
+  dplyr::select(all_of(DDR_metadata$Final_sample_name))
+
+ncol(DDR_counts) # Run this with the line below to ensure that sample numbers match
+nrow(DDR_metadata) # Run this with the line above to ensure that sample numbers match
+
+DDR_counts <- DDR_counts[, DDR_metadata$Final_sample_name] # Run this to explicitly ensure sample ordering is identical between counts and metadata file
+
+# # Creating DDR-specific DGE list
+DDR_dge <- DGEList(
+  counts = DDR_counts
+)
+
+DDR_dge <- calcNormFactors(
+  DDR_dge,
+  method = "TMM"
+)
+
+# # Building the DDR design matrix
+DDR_metadata$Stimulus <- factor(
+  DDR_metadata$Stimulus,
+  levels = c("DMSO", "DOX", "NUTL")
+)
+
+DDR_metadata$Species <- relevel(
+  factor(DDR_metadata$Species),
+  ref = "C"
+)
+
+DDR_design <- model.matrix(
+  ~ 0 + Species:Stimulus,
+  data = DDR_metadata
+)
+
+colnames(DDR_design)
+
+# Renaming columns to use underscores instead of default colons, colons will break the code
+colnames(DDR_design) <- c(
+  "SpeciesC_StimulusDMSO",
+  "SpeciesH_StimulusDMSO",
+  "SpeciesC_StimulusDOX",                      
+  "SpeciesH_StimulusDOX",
+  "SpeciesC_StimulusNUTL",
+  "SpeciesH_StimulusNUTL"
+)
+
+# Running Duplicate Correlations
+DDR_cor_fit <- duplicateCorrelation(object = DDR_dge$counts,
+                                design = DDR_design,
+                                block = DDR_metadata$Ind
+                                )
+
+DDR_voom_trend <- voom(DDR_dge,
+                   DDR_design,
+                   block = DDR_metadata$Ind, 
+                   correlation = DDR_cor_fit$consensus.correlation,
+                   plot = FALSE)
+
+
+# Fitting linear model
+DDR_fit <- lmFit(
+  DDR_voom_trend,
+  DDR_design,
+  block = DDR_metadata$Ind,
+  correlation = DDR_cor_fit$consensus.correlation
+)
+
+head(design)
+
+# Defining contrasts
+DDR_contrast_matrix <- makeContrasts(
+  Human_vs_Chimp_DMSO = 
+    (SpeciesH_StimulusDMSO - SpeciesC_StimulusDMSO),
+  Human_vs_Chimp_DOX = 
+    (SpeciesH_StimulusDOX - SpeciesC_StimulusDOX),
+  Human_vs_Chimp_NUTL = 
+    (SpeciesH_StimulusNUTL - SpeciesC_StimulusNUTL),
+  Chimp_DOX_vs_DMSO = 
+    (SpeciesC_StimulusDOX - SpeciesC_StimulusDMSO),
+  Human_DOX_vs_DMSO = 
+    (SpeciesH_StimulusDOX - SpeciesH_StimulusDMSO),
+  Chimp_NUTL_vs_DMSO = 
+    (SpeciesC_StimulusNUTL - SpeciesC_StimulusDMSO),
+  Human_NUTL_vs_DMSO = 
+    (SpeciesH_StimulusNUTL - SpeciesH_StimulusDMSO),
+  Interaction_DOX = 
+    (SpeciesH_StimulusDOX - SpeciesH_StimulusDMSO) -
+    (SpeciesC_StimulusDOX - SpeciesC_StimulusDMSO),
+  Interaction_NUTL = 
+    (SpeciesH_StimulusNUTL - SpeciesH_StimulusDMSO) -
+    (SpeciesC_StimulusNUTL - SpeciesC_StimulusDMSO),
+  levels = DDR_design
+)
+
+# Applying contrasts across samples
+DDR_fit2 <- contrasts.fit(DDR_fit, DDR_contrast_matrix)
+DDR_efit2 <- eBayes(DDR_fit2)
+DDR_signif_gene_results = decideTests(DDR_efit2, adjust.method = "BH", p.value = 0.05)
+
+summary(DDR_signif_gene_results)
+plotSA(DDR_efit2, main = "Mean-variance DDR final model trend")
+```
+
+#### Comparison of model.matricies for DDR
+```{r eval=FALSE, include=FALSE}
+design1 <- model.matrix(
+  ~ Species * Stimulus,
+  data = DDR_metadata
+)
+
+# colnames(design1)
+
+colnames(design1) <- c(
+  "Intercept",
+  "SpeciesH",
+  "StimulusDOX",                      
+  "StimulusNUTL",
+  "SpeciesH_StimulusDOX",
+  "SpeciesH_StimulusNUTL"
+)
+
+contrast1 <- makeContrasts(
+  Human_DOX_vs_VEH =
+    StimulusDOX + SpeciesH_StimulusDOX,
+  levels = design1
+)
+
+first_cor_fit <- duplicateCorrelation(object = DDR_dge$counts,
+                                design = design1,
+                                block = DDR_metadata$Ind
+                                )
+
+first_voom_trend <- voom(DDR_dge,
+                   design1,
+                   block = DDR_metadata$Ind, 
+                   correlation = first_cor_fit$consensus.correlation,
+                   plot = TRUE)
+
+
+# Fitting linear model
+first_fit <- lmFit(
+  first_voom_trend,
+  design1,
+  block = DDR_metadata$Ind,
+  correlation = first_cor_fit$consensus.correlation
+)
+
+  # Applying contrasts across samples
+first_fit2 <- contrasts.fit(first_fit, contrast1)
+first_efit2 <- eBayes(first_fit2)
+first_signif_gene_results = decideTests(first_efit2, adjust.method = "BH", p.value = 0.05)
+
+summary(first_signif_gene_results)
+plotSA(first_efit2, main = "Mean-variance First final model trend")
+
+# ---------------------------------------------------------------------------------------------------------------------------
+design2 <- model.matrix(
+  ~ 0 + Species:Stimulus,
+  data = DDR_metadata
+)
+
+# colnames(design2)
+
+colnames(design2) <- c(
+  "SpeciesC_StimulusDMSO",
+  "SpeciesH_StimulusDMSO",
+  "SpeciesC_StimulusDOX",                      
+  "SpeciesH_StimulusDOX",
+  "SpeciesC_StimulusNUTL",
+  "SpeciesH_StimulusNUTL"
+)
+
+contrast2 <- makeContrasts(
+  Human_DOX_vs_VEH =
+    (SpeciesH_StimulusDOX) -
+    (SpeciesH_StimulusDMSO),
+  levels = design2
+)
+
+second_cor_fit <- duplicateCorrelation(object = DDR_dge$counts,
+                                design = design2,
+                                block = DDR_metadata$Ind
+                                )
+
+second_voom_trend <- voom(DDR_dge,
+                   design2,
+                   block = DDR_metadata$Ind, 
+                   correlation = second_cor_fit$consensus.correlation,
+                   plot = TRUE)
+
+
+# Fitting linear model
+second_fit <- lmFit(
+  second_voom_trend,
+  design2,
+  block = DDR_metadata$Ind,
+  correlation = second_cor_fit$consensus.correlation
+)
+
+  # Applying contrasts across samples
+second_fit2 <- contrasts.fit(second_fit, contrast1)
+second_efit2 <- eBayes(second_fit2)
+second_signif_gene_results = decideTests(second_efit2, adjust.method = "BH", p.value = 0.05)
+
+summary(second_signif_gene_results)
+plotSA(second_efit2, main = "Mean-variance Second final model trend")
+
+results1 <- topTable(
+  first_efit2,
+  coef = "Human_DOX_vs_VEH",
+  number = Inf,
+  sort.by = "none"
+)
+
+results2 <- topTable(
+  second_efit2,
+  coef = "Human_DOX_vs_VEH",
+  number = Inf,
+  sort.by = "none"
+)
+
+cor(
+  results1$logFC,
+  results2$logFC
+)
+```
+
+
+### Unfolding Protein Response (UPR) DGE, Voom, and Contrast Matrix Development
+```{r eval=FALSE, include=FALSE}
+# ----------------------------------------------------------------------------------------------------------------------------------------------------
+# I will be ensuring my factors for the contrast matrices I will make are set correctly, but I need to make new data tables for each treatment type
+# ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+# # UPR setup
+UPR_metadata <- working_metadata_file %>%
+  dplyr::filter(Stimulus %in% c("DMSO", "THA", "TUN"))
+
+UPR_counts <- filtered_counts %>%
+  dplyr::select(all_of(UPR_metadata$Final_sample_name))
+
+ncol(UPR_counts) # Run this with the line below to ensure that sample numbers match
+nrow(UPR_metadata) # Run this with the line above to ensure that sample numbers match
+
+UPR_counts <- UPR_counts[, UPR_metadata$Final_sample_name] # Run this to explicitly ensure sample ordering is identical between counts and metadata file
+
+# # Creating DDR-specific DGE list
+UPR_dge <- DGEList(
+  counts = UPR_counts
+)
+
+UPR_dge <- calcNormFactors(
+  UPR_dge,
+  method = "TMM"
+)
+
+# # Building the DDR design matrix
+UPR_metadata$Stimulus <- factor(
+  UPR_metadata$Stimulus,
+  levels = c("DMSO", "THA", "TUN")
+)
+
+UPR_metadata$Species <- relevel(
+  factor(UPR_metadata$Species),
+  ref = "C"
+)
+
+UPR_design <- model.matrix(
+  ~ Species * Stimulus,
+  data = UPR_metadata
+)
+
+colnames(UPR_design)
+
+# Renaming columns to use underscores instead of default colons, colons will break the code
+colnames(UPR_design) <- c(
+  "Intercept",
+  "SpeciesH",
+  "StimulusTHA",                      
+  "StimulusTUN",
+  "SpeciesH_StimulusTHA",
+  "SpeciesH_StimulusTUN"
+)
+
+# Running Duplicate Correlations
+UPR_cor_fit <- duplicateCorrelation(object = UPR_dge$counts,
+                                design = UPR_design,
+                                block = UPR_metadata$Ind
+                                )
+
+UPR_voom_trend <- voom(UPR_dge,
+                   UPR_design,
+                   block = UPR_metadata$Ind, 
+                   correlation = UPR_cor_fit$consensus.correlation,
+                   plot = TRUE)
+
+
+# Fitting linear model
+UPR_fit <- lmFit(
+  UPR_voom_trend,
+  UPR_design,
+  block = UPR_metadata$Ind,
+  correlation = UPR_cor_fit$consensus.correlation
+)
+
+head(UPR_design)
+
+# Defining contrasts
+UPR_contrast_matrix <- makeContrasts(
+  Human_vs_Chimp_DMSO = SpeciesH,
+  Human_vs_Chimp_THA = SpeciesH + SpeciesH_StimulusTHA,
+  Human_vs_Chimp_TUN = SpeciesH + SpeciesH_StimulusTUN,
+  Chimp_THA_vs_DMSO = StimulusTHA,
+  Human_THA_vs_DMSO = StimulusTHA + SpeciesH_StimulusTHA,
+  Chimp_TUN_vs_DMSO = StimulusTUN,
+  Human_TUN_vs_DMSO = StimulusTUN + SpeciesH_StimulusTUN,
+  Interaction_THA = SpeciesH_StimulusTHA,
+  Interaction_TUN = SpeciesH_StimulusTUN,
+  levels = UPR_design
+)
+
+# Applying contrasts across samples
+UPR_fit2 <- contrasts.fit(UPR_fit, UPR_contrast_matrix)
+UPR_efit2 <- eBayes(UPR_fit2)
+UPR_signif_gene_results = decideTests(UPR_efit2, adjust.method = "BH", p.value = 0.05)
+
+summary(UPR_signif_gene_results)
+plotSA(UPR_efit2, main = "Mean-variance UPR final model trend")
+
+```
+
+
+### Innate Immune Response (IMR) DGE, Voom, and Contrast Matrix Development
+```{r eval=FALSE, include=FALSE}
+# ----------------------------------------------------------------------------------------------------------------------------------------------------
+# I will be ensuring my factors for the contrast matrices I will make are set correctly, but I need to make new data tables for each treatment type
+# ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+# # IMR setup
+IMR_metadata <- working_metadata_file %>%
+  dplyr::filter(Stimulus %in% c("H2O", "LPS", "TNFa"))
+
+IMR_counts <- filtered_counts %>%
+  dplyr::select(all_of(IMR_metadata$Final_sample_name))
+
+ncol(IMR_counts) # Run this with the line below to ensure that sample numbers match
+nrow(IMR_metadata) # Run this with the line above to ensure that sample numbers match
+
+IMR_counts <- IMR_counts[, IMR_metadata$Final_sample_name] # Run this to explicitly ensure sample ordering is identical between counts and metadata file
+
+# # Creating DDR-specific DGE list
+IMR_dge <- DGEList(
+  counts = IMR_counts
+)
+
+IMR_dge <- calcNormFactors(
+  IMR_dge,
+  method = "TMM"
+)
+
+# # Building the DDR design matrix
+IMR_metadata$Stimulus <- factor(
+  IMR_metadata$Stimulus,
+  levels = c("H2O", "LPS", "TNFa")
+)
+
+IMR_metadata$Species <- relevel(
+  factor(IMR_metadata$Species),
+  ref = "C"
+)
+
+IMR_design <- model.matrix(
+  ~ Species * Stimulus,
+  data = IMR_metadata
+)
+
+colnames(IMR_design)
+
+# Renaming columns to use underscores instead of default colons, colons will break the code
+colnames(IMR_design) <- c(
+  "Intercept",
+  "SpeciesH",
+  "StimulusLPS",                      
+  "StimulusTNFa",
+  "SpeciesH_StimulusLPS",
+  "SpeciesH_StimulusTNFa"
+)
+
+# Running Duplicate Correlations
+IMR_cor_fit <- duplicateCorrelation(object = IMR_dge$counts,
+                                design = IMR_design,
+                                block = IMR_metadata$Ind
+                                )
+
+IMR_voom_trend <- voom(IMR_dge,
+                   IMR_design,
+                   block = IMR_metadata$Ind, 
+                   correlation = IMR_cor_fit$consensus.correlation,
+                   plot = TRUE)
+
+
+# Fitting linear model
+IMR_fit <- lmFit(
+  IMR_voom_trend,
+  IMR_design,
+  block = IMR_metadata$Ind,
+  correlation = IMR_cor_fit$consensus.correlation
+)
+
+head(IMR_design)
+
+# Defining contrasts
+IMR_contrast_matrix <- makeContrasts(
+  Human_vs_Chimp_H2O = SpeciesH,
+  Human_vs_Chimp_LPS = SpeciesH + SpeciesH_StimulusLPS,
+  Human_vs_Chimp_TNFa = SpeciesH + SpeciesH_StimulusTNFa,
+  Chimp_LPS_vs_H2O = StimulusLPS,
+  Human_LPS_vs_H2O = StimulusLPS + SpeciesH_StimulusLPS,
+  Chimp_TNFa_vs_H2O = StimulusTNFa,
+  Human_TNFa_vs_H2O = StimulusTNFa + SpeciesH_StimulusTNFa,
+  Interaction_THA = SpeciesH_StimulusLPS,
+  Interaction_TNFa = SpeciesH_StimulusTNFa,
+  levels = IMR_design
+)
+
+# Applying contrasts across samples
+IMR_fit2 <- contrasts.fit(IMR_fit, IMR_contrast_matrix)
+IMR_efit2 <- eBayes(IMR_fit2)
+IMR_signif_gene_results = decideTests(IMR_efit2, adjust.method = "BH", p.value = 0.05)
+
+summary(IMR_signif_gene_results)
+plotSA(IMR_efit2, main = "Mean-variance IMR final model trend")
+
+```
+
+
+## Identifying DGEs for ALL Responses as One Set
+
+### Using model.matrix(~0 + Species:Stimulus)
+```{r eval=FALSE, include=FALSE}
+
+filtered_counts <- filtered_counts[, working_metadata_file$Final_sample_name] # Run this to explicitly ensure sample ordering is identical between counts and metadata file
+
+# # Creating DDR-specific DGE list
+all_dge <- DGEList(
+  counts = filtered_counts
+)
+
+all_dge <- calcNormFactors(
+  all_dge,
+  method = "TMM"
+)
+
+# # Building the DDR design matrix
+working_metadata_file$Stimulus <- factor(
+  working_metadata_file$Stimulus,
+  levels = c("DMSO",
+             "DOX",
+             "NUTL",
+             "TUN",
+             "THA",
+             "H2O",
+             "TNFa",
+             "LPS"
+             )
+  )
+
+working_metadata_file$Species <- relevel(
+  factor(working_metadata_file$Species),
+  ref = "C"
+)
+
+all_dge_design <- model.matrix(
+  ~ 0 + Species:Stimulus,
+  data = working_metadata_file
+)
+
+head(all_dge_design)
+colnames(all_dge_design)
+
+# Renaming columns to use underscores instead of default colons, colons will break the code
+colnames(all_dge_design) <- c(
+  "SpeciesC_StimulusDMSO",
+  "SpeciesH_StimulusDMSO",
+  "SpeciesC_StimulusDOX",
+  "SpeciesH_StimulusDOX",                      
+  "SpeciesC_StimulusNUTL",
+  "SpeciesH_StimulusNUTL",
+  "SpeciesC_StimulusTUN",
+  "SpeciesH_StimulusTUN",
+  "SpeciesC_StimulusTHA",
+  "SpeciesH_StimulusTHA",
+  "SpeciesC_StimulusH2O",
+  "SpeciesH_StimulusH2O",
+  "SpeciesC_StimulusTNFa",
+  "SpeciesH_StimulusTNFa",
+  "SpeciesC_StimulusLPS",
+  "SpeciesH_StimulusLPS"
+)
+
+# Running Duplicate Correlations
+all_dge_cor_fit <- duplicateCorrelation(object = all_dge$counts,
+                                design = all_dge_design,
+                                block = working_metadata_file$Ind
+                                )
+
+all_dge_voom_trend <- voom(all_dge,
+                   all_dge_design,
+                   block = working_metadata_file$Ind, 
+                   correlation = all_dge_cor_fit$consensus.correlation,
+                   plot = FALSE)
+
+
+# Fitting linear model
+all_dge_fit <- lmFit(
+  all_dge_voom_trend,
+  all_dge_design,
+  block = working_metadata_file$Ind,
+  correlation = all_dge_cor_fit$consensus.correlation
+)
+
+head(all_dge_design)
+
+# Defining contrasts
+all_dge_contrast_matrix <- makeContrasts(
+  Human_DOX_vs_DMSO =
+    SpeciesH_StimulusDOX - SpeciesH_StimulusDMSO,
+  Chimp_DOX_vs_DMSO =
+    SpeciesC_StimulusDOX - SpeciesC_StimulusDMSO,
+  Interaction_DOX =
+    (SpeciesH_StimulusDOX - SpeciesH_StimulusDMSO) -
+    (SpeciesC_StimulusDOX - SpeciesC_StimulusDMSO),
+  Human_NUTL_vs_DMSO =
+    SpeciesH_StimulusNUTL - SpeciesH_StimulusDMSO,
+  Chimp_NUTL_vs_DMSO =
+    SpeciesC_StimulusNUTL - SpeciesC_StimulusDMSO,
+  Interaction_NUTL =
+    (SpeciesH_StimulusNUTL - SpeciesH_StimulusDMSO) -
+    (SpeciesC_StimulusNUTL - SpeciesC_StimulusDMSO),
+  Human_TUN_vs_DMSO =
+     SpeciesH_StimulusTUN - SpeciesH_StimulusDMSO,
+  Chimp_TUN_vs_DMSO =
+    SpeciesC_StimulusTUN - SpeciesC_StimulusDMSO,
+  Interaction_TUN =
+    (SpeciesH_StimulusTUN - SpeciesH_StimulusDMSO) -
+    (SpeciesC_StimulusTUN - SpeciesC_StimulusDMSO),
+  Human_THA_vs_DMSO =
+    SpeciesH_StimulusTHA - SpeciesH_StimulusDMSO,
+  Chimp_THA_vs_DMSO =
+    SpeciesC_StimulusTHA - SpeciesC_StimulusDMSO,
+  Interaction_THA =
+    (SpeciesH_StimulusTHA - SpeciesH_StimulusDMSO) -
+    (SpeciesC_StimulusTHA - SpeciesC_StimulusDMSO),
+  Human_TNFa_vs_H2O =
+    SpeciesH_StimulusTNFa - SpeciesH_StimulusH2O,
+  Chimp_TNFa_vs_H2O =
+    SpeciesC_StimulusTNFa - SpeciesC_StimulusH2O,
+  Interaction_TNFa =
+    (SpeciesH_StimulusTNFa - SpeciesH_StimulusH2O) -
+    (SpeciesC_StimulusTNFa - SpeciesC_StimulusH2O),
+  Human_LPS_vs_H2O =
+    SpeciesH_StimulusLPS - SpeciesH_StimulusH2O,
+  Chimp_LPS_vs_H2O =
+   SpeciesC_StimulusLPS - SpeciesC_StimulusH2O,
+  Interaction_LPS =
+    (SpeciesH_StimulusLPS - SpeciesH_StimulusH2O) -
+    (SpeciesC_StimulusLPS - SpeciesC_StimulusH2O),
+  levels = all_dge_design
+)
+
+# Applying contrasts across samples
+all_dge_fit2 <- contrasts.fit(all_dge_fit, all_dge_contrast_matrix)
+all_dge_efit2 <- eBayes(all_dge_fit2)
+all_dge_signif_gene_results = decideTests(all_dge_efit2, adjust.method = "BH", p.value = 0.05)
+
+summary(all_dge_signif_gene_results)
+plotSA(all_dge_efit2, main = "Mean-variance All Response Samples final model trend")
+```
+
+### Using model.matrix(~0 + Grouping)
+```{r eval=FALSE, include=FALSE}
+filtered_counts <- filtered_counts[, working_metadata_file$Final_sample_name] # Run this to explicitly ensure sample ordering is identical between counts and metadata file
+
+# # Creating DDR-specific DGE list
+all_dge <- DGEList(
+  counts = filtered_counts
+)
+
+all_dge <- calcNormFactors(
+  all_dge,
+  method = "TMM"
+)
+
+# # Building the DDR design matrix
+working_metadata_file$Stimulus <- factor(
+  working_metadata_file$Stimulus,
+  levels = c("DMSO",
+             "DOX",
+             "NUTL",
+             "TUN",
+             "THA",
+             "H2O",
+             "TNFa",
+             "LPS"
+             )
+  )
+
+# working_metadata_file$Species <- relevel(
+#   factor(working_metadata_file$Species),
+#   ref = "C"
+# )
+
+all_dge_design <- model.matrix(
+  ~ 0 + Grouping,
+  data = working_metadata_file
+)
+
+# head(all_dge_design)
+colnames(all_dge_design)
+
+# Running Duplicate Correlations
+all_dge_cor_fit <- duplicateCorrelation(object = all_dge$counts,
+                                design = all_dge_design,
+                                block = working_metadata_file$Ind
+                                )
+
+all_dge_voom_trend <- voom(all_dge,
+                   all_dge_design,
+                   block = working_metadata_file$Ind,
+                   correlation = all_dge_cor_fit$consensus.correlation,
+                   plot = FALSE)
+
+
+# Fitting linear model
+all_dge_fit <- lmFit(
+  all_dge_voom_trend,
+  all_dge_design,
+  block = working_metadata_file$Ind,
+  correlation = all_dge_cor_fit$consensus.correlation
+)
+
+# Defining contrasts
+all_dge_contrast_matrix <- makeContrasts(
+  Human_DOX_vs_DMSO =
+    GroupingHuman_DOX - GroupingHuman_DMSO,
+  Chimp_DOX_vs_DMSO =
+    GroupingChimp_DOX - GroupingChimp_DMSO,
+  Interaction_DOX =
+    (GroupingHuman_DOX - GroupingHuman_DMSO) -
+    (GroupingChimp_DOX - GroupingChimp_DMSO),
+  Human_NUTL_vs_DMSO =
+    GroupingHuman_NUTL - GroupingHuman_DMSO,
+  Chimp_NUTL_vs_DMSO =
+    GroupingChimp_NUTL - GroupingChimp_DMSO,
+  Interaction_NUTL =
+    (GroupingHuman_NUTL - GroupingHuman_DMSO) -
+    (GroupingChimp_NUTL - GroupingChimp_DMSO),
+  Human_TUN_vs_DMSO =
+     GroupingHuman_TUN - GroupingHuman_DMSO,
+  Chimp_TUN_vs_DMSO =
+    GroupingChimp_TUN - GroupingChimp_DMSO,
+  Interaction_TUN =
+    (GroupingHuman_TUN - GroupingHuman_DMSO) -
+    (GroupingChimp_TUN - GroupingChimp_DMSO),
+  Human_THA_vs_DMSO =
+    GroupingHuman_THA - GroupingHuman_DMSO,
+  Chimp_THA_vs_DMSO =
+    GroupingChimp_THA - GroupingChimp_DMSO,
+  Interaction_THA =
+    (GroupingHuman_THA - GroupingHuman_DMSO) -
+    (GroupingChimp_THA - GroupingChimp_DMSO),
+  Human_TNFa_vs_H2O =
+    GroupingHuman_TNFa - GroupingHuman_H2O,
+  Chimp_TNFa_vs_H2O =
+    GroupingChimp_TNFa - GroupingChimp_H2O,
+  Interaction_TNFa =
+    (GroupingHuman_TNFa - GroupingHuman_H2O) -
+    (GroupingChimp_TNFa - GroupingChimp_H2O),
+  Human_LPS_vs_H2O =
+    GroupingHuman_LPS - GroupingHuman_H2O,
+  Chimp_LPS_vs_H2O =
+   GroupingChimp_LPS - GroupingChimp_H2O,
+  Interaction_LPS =
+    (GroupingHuman_LPS - GroupingHuman_H2O) -
+    (GroupingChimp_LPS - GroupingChimp_H2O),
+  levels = all_dge_design
+)
+
+# Applying contrasts across samples
+all_dge_fit2 <- contrasts.fit(all_dge_fit, all_dge_contrast_matrix)
+all_dge_efit2 <- eBayes(all_dge_fit2)
+all_dge_signif_gene_results = decideTests(all_dge_efit2, adjust.method = "BH", p.value = 0.05)
+
+summary(all_dge_signif_gene_results)
+plotSA(all_dge_efit2, main = "Mean-variance All Response Samples final model trend")
+```
+
+### Using model.matrix (~ Species * Stimulus), using Chimp and H2O as my references
+```{r}
+filtered_counts <- filtered_counts[, working_metadata_file$Final_sample_name] # Run this to explicitly ensure sample ordering is identical between counts and metadata file
+
+# # Creating DDR-specific DGE list
+all_dge <- DGEList(
+  counts = filtered_counts
+)
+
+all_dge <- calcNormFactors(
+  all_dge,
+  method = "TMM"
+)
+
+# # Building the DDR design matrix
+working_metadata_file$Stimulus <- factor(
+  working_metadata_file$Stimulus,
+  levels = c("H2O", # Water is leveled first because this will be our reference
+             "DMSO",
+             "DOX",
+             "NUTL",
+             "TUN",
+             "THA",
+             "TNFa",
+             "LPS"
+             )
+  )
+
+working_metadata_file$Species <- relevel(
+  factor(working_metadata_file$Species),
+  ref = "C"
+)
+
+working_metadata_file$Stimulus <- relevel(
+  factor(working_metadata_file$Stimulus),
+  ref = "H2O"
+) # We are setting the Stimulus reference to H2O because DMSO is dissolved in H2O
+
+all_dge_design <- model.matrix(
+  ~ Species * Stimulus, # ORDER MATTERS: here, with species first and stimulus second, I am controlling for species while observing interactions of the main effect, stimulus
+  data = working_metadata_file
+)
+
+colnames(all_dge_design)
+# all_dge_design
+
+colnames(all_dge_design) <- c(
+  "Intercept", # means Chimp + H2O
+  "SpeciesH", # means Human vs Chimp under H2O
+  "StimulusDMSO", # means Chimp DMSO vs H2O
+  "StimulusDOX", # means Chimp DOX vs H2O
+  "StimulusNUTL", # means Chimp NUTL vs H2O
+  "StimulusTUN", # means Chimp TUN vs H2O
+  "StimulusTHA", # means Chimp THA vs H2O
+  "StimulusTNFa", # means Chimp TNFa vs H2O
+  "StimulusLPS", # means Chimp LPS vs H2O
+  "SpeciesH_StimulusDMSO", # means (Human DMSO vs H2O) - (Chimp DMSO vs H2O)
+  "SpeciesH_StimulusDOX", # means (Human DOX vs H2O) - (Chimp DOX vs H2O)
+  "SpeciesH_StimulusNUTL", # means (Human NUTL vs H2O) - (Chimp NUTL vs H2O)
+  "SpeciesH_StimulusTUN", # means (Human TUN vs H2O) - (Chimp TUN vs H2O)
+  "SpeciesH_StimulusTHA", # means (Human THA vs H2O) - (Chimp THA vs H2O)
+  "SpeciesH_StimulusTNFa", # means (Human TNFa vs H2O) - (Chimp TNFa vs H2O)
+  "SpeciesH_StimulusLPS" # means (Human LPS vs H2O) - (Chimp LPS vs H2O)
+)
+
+# Running Duplicate Correlations
+all_dge_cor_fit <- duplicateCorrelation(object = all_dge$counts,
+                                design = all_dge_design,
+                                block = working_metadata_file$Ind
+                                )
+
+all_dge_voom_trend <- voom(all_dge,
+                   all_dge_design,
+                   block = working_metadata_file$Ind, 
+                   correlation = all_dge_cor_fit$consensus.correlation,
+                   plot = FALSE)
+
+
+# Fitting linear model
+all_dge_fit <- lmFit(
+  all_dge_voom_trend,
+  all_dge_design,
+  block = working_metadata_file$Ind,
+  correlation = all_dge_cor_fit$consensus.correlation
+)
+
+# head(all_dge_design)
+
+# Defining contrasts
+all_dge_contrast_matrix <- makeContrasts(
+#Setting my reference control
+    Human_vs_Chimp_H2O =
+    SpeciesH,
+# -------------------------------------------------------------------------    
+
+# DMSO comparisons 
+  Chimp_DMSO_vs_H2O =
+    StimulusDMSO,
+  Human_DMSO_vs_H2O =
+    StimulusDMSO + SpeciesH_StimulusDMSO,
+  Human_vs_Chimp_DMSO =
+    SpeciesH + SpeciesH_StimulusDMSO,
+  Interaction_DMSO = 
+    SpeciesH_StimulusDMSO,
+# -------------------------------------------------------------------------    
+
+# IMR comparisons    
+  Chimp_TNFa_vs_H2O =
+    StimulusTNFa,
+  Human_TNFa_vs_H2O =
+    StimulusTNFa + SpeciesH_StimulusTNFa,
+  Human_vs_Chimp_TNFa =
+    SpeciesH + SpeciesH_StimulusTNFa,
+  TNFa_Interaction =
+    SpeciesH_StimulusTNFa,
+# -------------------------------------------------------------------------    
+  
+  Chimp_LPS_vs_H2O =
+    StimulusLPS,
+  Human_LPS_vs_H2O =
+    StimulusLPS + SpeciesH_StimulusLPS,
+  Human_vs_Chimp_LPS =
+    SpeciesH + SpeciesH_StimulusLPS,
+  LPS_Interaction =
+    SpeciesH_StimulusLPS,
+# -------------------------------------------------------------------------    
+
+# DDR comparisons  
+  Human_vs_Chimp_DOX = 
+    SpeciesH + SpeciesH_StimulusDOX,
+  Chimp_DOX_vs_DMSO =
+    StimulusDOX - StimulusDMSO, # This outputs: ((Chimp DOX - Chimp H2O) - (Chimp DMSO - Chimp H2O)) = Chimp DOX - Chimp DMSO
+  Human_DOX_vs_DMSO =
+    StimulusDOX - StimulusDMSO + # This outputs: Chimp DOX - Chimp DMSO
+    SpeciesH_StimulusDOX - # This outputs: (Human DOX vs Human H2O) - (Chimp DOX vs Chimp H2O)
+    SpeciesH_StimulusDMSO, # This outputs: -[(Human DMSO vs Human H2O) - (Chimp DMSO vs Chimp H2O)]
+# The long equation becomes: Chimp DOX - Chimp DMSO + Human DOX - Human H2O - Chimp DOX + Chimp H2O - Human DMSO + Human H2O + Chimp DMSO - Chimp H2O
+# OVERALL, this outputs: (Human DOX - Chimp H2O) - (Human DMSO - Chimp H2O) = **Human DOX - Human DMSO**
+# This works because the "vs" symbols between attributes act like minus signs. As a result, terms cancel and we are left with the final result
+  DOX_Interaction =
+    SpeciesH_StimulusDOX -
+    SpeciesH_StimulusDMSO,
+# -------------------------------------------------------------------------    
+  
+  Human_vs_Chimp_NUTL = 
+    SpeciesH + SpeciesH_StimulusNUTL,
+  Chimp_NUTL_vs_DMSO =
+    StimulusNUTL - StimulusDMSO,
+  Human_NUTL_vs_DMSO =
+    StimulusNUTL - StimulusDMSO +
+    SpeciesH_StimulusNUTL -
+    SpeciesH_StimulusDMSO,
+  NUTL_Interaction =
+    SpeciesH_StimulusNUTL -
+    SpeciesH_StimulusDMSO,
+# -------------------------------------------------------------------------    
+
+# UPR comparisons
+  Human_vs_Chimp_TUN = 
+    SpeciesH + SpeciesH_StimulusTUN,
+  Chimp_TUN_vs_DMSO =
+    StimulusTUN - StimulusDMSO,
+  Human_TUN_vs_DMSO =
+    StimulusTUN - StimulusDMSO +
+    SpeciesH_StimulusTUN -
+    SpeciesH_StimulusDMSO,
+  TUN_Interaction =
+    SpeciesH_StimulusTUN -
+    SpeciesH_StimulusDMSO,
+# -------------------------------------------------------------------------    
+
+  Human_vs_Chimp_THA = 
+    SpeciesH + SpeciesH_StimulusTHA,  
+  Chimp_THA_vs_DMSO =
+    StimulusTHA - StimulusDMSO,
+  Human_THA_vs_DMSO =
+    StimulusTHA - StimulusDMSO +
+    SpeciesH_StimulusTHA -
+    SpeciesH_StimulusDMSO,
+  THA_Interaction =
+    SpeciesH_StimulusTHA -
+    SpeciesH_StimulusDMSO,
+# -------------------------------------------------------------------------    
+  levels = all_dge_design
+)
+
+# Applying contrasts across samples
+all_dge_fit2 <- contrasts.fit(all_dge_fit, all_dge_contrast_matrix)
+all_dge_efit2 <- eBayes(all_dge_fit2)
+all_dge_signif_gene_results = decideTests(all_dge_efit2, adjust.method = "BH", p.value = 0.05)
+
+summary(all_dge_signif_gene_results)
+length(colnames(all_dge_signif_gene_results))
+plotSA(all_dge_efit2, main = "Mean-variance All Response Samples final model trend")
+```
+
+## Toptable Assignments
+```{r Creating TopTables}
+Human_vs_Chimp_H2O <- topTable(all_dge_efit2, coef = "Human_vs_Chimp_H2O", adjust.method = "BH", p.value = 1, number = Inf)
+Chimp_DMSO_vs_H2O <- topTable(all_dge_efit2, coef = "Chimp_DMSO_vs_H2O", adjust.method = "BH", p.value = 1, number = Inf)
+Human_DMSO_vs_H2O <- topTable(all_dge_efit2, coef = "Human_DMSO_vs_H2O", adjust.method = "BH", p.value = 1, number = Inf)
+Human_vs_Chimp_DMSO <- topTable(all_dge_efit2, coef = "Human_vs_Chimp_DMSO", adjust.method = "BH", p.value = 1, number = Inf)
+Interaction_DMSO <- topTable(all_dge_efit2, coef = "Interaction_DMSO", adjust.method = "BH", p.value = 1, number = Inf)
+Chimp_TNFa_vs_H2O <- topTable(all_dge_efit2, coef = "Chimp_TNFa_vs_H2O", adjust.method = "BH", p.value = 1, number = Inf)
+Human_TNFa_vs_H2O <- topTable(all_dge_efit2, coef = "Human_TNFa_vs_H2O", adjust.method = "BH", p.value = 1, number = Inf)
+Human_vs_Chimp_TNFa <- topTable(all_dge_efit2, coef = "Human_vs_Chimp_TNFa", adjust.method = "BH", p.value = 1, number = Inf)
+TNFa_Interaction <- topTable(all_dge_efit2, coef = "TNFa_Interaction", adjust.method = "BH", p.value = 1, number = Inf)
+Chimp_LPS_vs_H2O <- topTable(all_dge_efit2, coef = "Chimp_LPS_vs_H2O", adjust.method = "BH", p.value = 1, number = Inf)
+Human_LPS_vs_H2O <- topTable(all_dge_efit2, coef = "Human_LPS_vs_H2O", adjust.method = "BH", p.value = 1, number = Inf)
+Human_vs_Chimp_LPS <- topTable(all_dge_efit2, coef = "Human_vs_Chimp_LPS", adjust.method = "BH", p.value = 1, number = Inf)
+LPS_Interaction <- topTable(all_dge_efit2, coef = "LPS_Interaction", adjust.method = "BH", p.value = 1, number = Inf)
+Human_vs_Chimp_DOX <- topTable(all_dge_efit2, coef = "Human_vs_Chimp_DOX", adjust.method = "BH", p.value = 1, number = Inf)
+Chimp_DOX_vs_DMSO <- topTable(all_dge_efit2, coef = "Chimp_DOX_vs_DMSO", adjust.method = "BH", p.value = 1, number = Inf)
+Human_DOX_vs_DMSO <- topTable(all_dge_efit2, coef = "Human_DOX_vs_DMSO", adjust.method = "BH", p.value = 1, number = Inf)
+DOX_Interaction <- topTable(all_dge_efit2, coef = "DOX_Interaction", adjust.method = "BH", p.value = 1, number = Inf)
+Human_vs_Chimp_NUTL <- topTable(all_dge_efit2, coef = "Human_vs_Chimp_NUTL", adjust.method = "BH", p.value = 1, number = Inf)
+Chimp_NUTL_vs_DMSO <- topTable(all_dge_efit2, coef = "Chimp_NUTL_vs_DMSO", adjust.method = "BH", p.value = 1, number = Inf)
+Human_NUTL_vs_DMSO <- topTable(all_dge_efit2, coef = "Human_NUTL_vs_DMSO", adjust.method = "BH", p.value = 1, number = Inf)
+NUTL_Interaction <- topTable(all_dge_efit2, coef = "NUTL_Interaction", adjust.method = "BH", p.value = 1, number = Inf)
+Human_vs_Chimp_TUN <- topTable(all_dge_efit2, coef = "Human_vs_Chimp_TUN", adjust.method = "BH", p.value = 1, number = Inf)
+Chimp_TUN_vs_DMSO <- topTable(all_dge_efit2, coef = "Chimp_TUN_vs_DMSO", adjust.method = "BH", p.value = 1, number = Inf)
+Human_TUN_vs_DMSO <- topTable(all_dge_efit2, coef = "Human_TUN_vs_DMSO", adjust.method = "BH", p.value = 1, number = Inf)
+TUN_Interaction <- topTable(all_dge_efit2, coef = "TUN_Interaction", adjust.method = "BH", p.value = 1, number = Inf)
+Human_vs_Chimp_THA <- topTable(all_dge_efit2, coef = "Human_vs_Chimp_THA", adjust.method = "BH", p.value = 1, number = Inf)
+Chimp_THA_vs_DMSO <- topTable(all_dge_efit2, coef = "Chimp_THA_vs_DMSO", adjust.method = "BH", p.value = 1, number = Inf)
+Human_THA_vs_DMSO <- topTable(all_dge_efit2, coef = "Human_THA_vs_DMSO", adjust.method = "BH", p.value = 1, number = Inf)
+THA_Interaction <- topTable(all_dge_efit2, coef = "THA_Interaction", adjust.method = "BH", p.value = 1, number = Inf)
+
+save_PHTO_toptable_list <- list(
+  "HvC_H2O"=Human_vs_Chimp_H2O,
+  "C_DMSOvH2O"=Chimp_DMSO_vs_H2O,
+  "H_DMSOvH2O"=Human_DMSO_vs_H2O,
+  "HvC_DMSO"=Human_vs_Chimp_DMSO,
+  "Int_DMSO"=Interaction_DMSO,
+  "C_TNFavH2O"=Chimp_TNFa_vs_H2O,
+  "H_TNFavH2O"=Human_TNFa_vs_H2O,
+  "HvC_TNFa"=Human_vs_Chimp_TNFa,
+  "Int_TNFa"=TNFa_Interaction,
+  "C_LPSvH2O"=Chimp_LPS_vs_H2O,
+  "H_LPSvH2O"=Human_LPS_vs_H2O,
+  "HvC_LPS"=Human_vs_Chimp_LPS,
+  "Int_LPS"=LPS_Interaction,
+  "HvC_DOX"=Human_vs_Chimp_DOX,
+  "C_DOXvDMSO"=Chimp_DOX_vs_DMSO,
+  "H_DOXvDMSO"=Human_DOX_vs_DMSO,
+  "Int_DOX"=DOX_Interaction,
+  "HvC_NUTL"=Human_vs_Chimp_NUTL,
+  "C_NUTLvDMSO"=Chimp_NUTL_vs_DMSO,
+  "H_NUTLvDMSO"=Human_NUTL_vs_DMSO,
+  "Int_NUTL"=NUTL_Interaction,
+  "HvC_TUN"=Human_vs_Chimp_TUN,
+  "C_TUNvDMSO"=Chimp_TUN_vs_DMSO,
+  "H_TUNvDMSO"=Human_TUN_vs_DMSO,
+  "Int_TUN"=TUN_Interaction,
+  "HvC_THA"=Human_vs_Chimp_THA,
+  "C_THAvDMSO"=Chimp_THA_vs_DMSO,
+  "H_THAvDMSO"=Human_THA_vs_DMSO,
+  "Int_THA"=THA_Interaction
+  )
+
+saveRDS(save_PHTO_toptable_list, "data/PHTO_toptable_results.RDS")
+```
+
+## Look Up Table for all Ensembls of interest
+```{r}
+## Extracting all unique Ensembl IDs
+PHTO_toptable_results <- readRDS("data/PHTO_toptable_results.RDS")
+all_ensembls <- PHTO_toptable_results %>%
+  purrr::map(rownames) %>%
+  unlist() %>%
+  unique()
+
+# length(all_ensembl)
+# 
+# head(all_ensembl)
+
+## Mapping Ensembls to their respective Symbols and Entrez IDs
+PHTO_annotation_df <- AnnotationDbi::select(
+  org.Hs.eg.db,
+  keys = all_ensembls,
+  keytype = "ENSEMBL",
+  columns = c(
+    "ENSEMBL",
+    "ENTREZID",
+    "SYMBOL"
+  )
+) %>%
+  dplyr::distinct(
+    ENSEMBL,
+    .keep_all = TRUE
+  )
+
+
+PHTO_lookup_table <- tibble::tibble(
+  Ensembl = all_ensembls
+) %>%
+  dplyr::left_join(
+    PHTO_annotation_df,
+    by = c("Ensembl" = "ENSEMBL")
+  ) %>%
+  dplyr::rename(
+    Entrez_ID = ENTREZID,
+    Symbol = SYMBOL
+  )
+
+PHTO_ensembl_to_gene_mapping_sucess <- PHTO_lookup_table %>%
+  dplyr::summarise(
+    Total = dplyr::n(),
+    
+    Symbol_mapped = sum(!is.na(Symbol)),
+    Symbol_unmapped = sum(is.na(Symbol)),
+    
+    Entrez_mapped = sum(!is.na(Entrez_ID)),
+    Entrez_unmapped = sum(is.na(Entrez_ID))
+  )
+PHTO_ensembl_to_gene_mapping_sucess
+
+saveRDS(PHTO_lookup_table, "data/PHTO_lookup_table.RDS")
+```
+
+
+## Volcano Plots
+```{r Volcano Plots comparing treatment conditions within the same species using limma, fig.height=4, fig.width=6}
+PHTO_toptable_results <- readRDS("data/PHTO_toptable_results.RDS")
+PHTO_lookup_table <- readRDS("data/PHTO_lookup_table.RDS")
+PHTO_toptable_list <- list(
+  "HvC_H2O",
+  "C_DMSOvH2O",
+  "H_DMSOvH2O",
+  "HvC_DMSO",
+  "Int_DMSO",
+  "C_TNFavH2O",
+  "H_TNFavH2O",
+  "HvC_TNFa",
+  "Int_TNFa",
+  "C_LPSvH2O",
+  "H_LPSvH2O",
+  "HvC_LPS",
+  "Int_LPS",
+  "HvC_DOX",
+  "C_DOXvDMSO",
+  "H_DOXvDMSO",
+  "Int_DOX",
+  "HvC_NUTL",
+  "C_NUTLvDMSO",
+  "H_NUTLvDMSO",
+  "Int_NUTL",
+  "HvC_TUN",
+  "C_TUNvDMSO",
+  "H_TUNvDMSO",
+  "Int_TUN",
+  "HvC_THA",
+  "C_THAvDMSO",
+  "H_THAvDMSO",
+  "Int_THA"
+  )
+
+generate_volcano_plot <- function(toptable, list_name) {
+
+  volcano_colors <- toptable %>%
+    tibble::rownames_to_column("Genes") %>%
+    dplyr::left_join(PHTO_lookup_table %>% 
+                tibble::rownames_to_column("Ensemble") %>% 
+                dplyr::select(Ensemble, Symbol),
+              by = c("Genes" = "Ensemble")) %>% 
+    dplyr::mutate(
+    id_label = ifelse(
+      is.na(Symbol),
+      Genes,
+      Symbol
+    )
+  ) %>% 
+    dplyr::mutate(
+      neglog10AdjP = -log10(pmax(adj.P.Val, 1e-300)),
+      color_key = case_when(
+        adj.P.Val < 0.05 & logFC > 0  ~ "Up",
+        adj.P.Val < 0.05 & logFC < 0 ~ "Down",
+        TRUE ~ "NS"
+      )
+    )
+
+  top_genes <- volcano_colors %>%
+  dplyr::arrange(adj.P.Val) %>% 
+  dplyr::filter(adj.P.Val < 0.05) %>% 
+  slice_head(n = 20)
+  
+  gene_counts <- volcano_colors %>%
+    dplyr::summarise(
+      Up = sum(color_key == "Up"),
+      Down = sum(color_key == "Down"),
+      NS = sum(color_key == "NS")
+    )
+  
+  # genes_of_interest <- volcano_colors %>%
+  #   dplyr::filter(id_label %in% c("ASPHD2", "C1R", "PARP12", "GBP2", "TNFSF13B", "TUBB", "GRAMD2A", "FAM107A", "ZCWPW2", "TRIB1", "C1S", "CD47", "SFT2D2", "CIBAR1", "IFITM2", "TESK2", "STAMBPL", "NUP58", "BPGM", "CIMAP3", "CD9", "CFH", "SLC35A4", "ENSG00000284048", "UST", "A2M", "CACHD1", "VPS13C", "FBXO31", "NORAD"))
+
+  p <- ggplot(
+    volcano_colors,
+    aes(x = logFC, y = neglog10AdjP)
+    ) +
+    geom_point(
+      aes(color = color_key),
+      size = 2,
+      alpha = 0.6
+    ) +
+    
+   # coord_cartesian(
+   #    xlim = c(-12, 12),
+   #    ylim = c(0, 20)
+   #  ) +
+    
+    # geom_vline(
+    # xintercept = c(-1,1),
+    # linetype = "dashed"
+    # ) +
+    # geom_hline(
+    # yintercept = -log10(0.05),
+    # linetype = "dashed"
+    # ) +
+    
+    geom_text_repel(
+      data = top_genes,
+      aes(label = id_label),
+      size = 3,
+      max.overlaps = Inf,
+      box.padding = 0.5
+    ) +
+
+    scale_color_manual(
+      name = NULL,
+      values = c(
+        "Up" = "red",
+        "Down" = "blue",
+        "NS" = "grey50"
+      ),
+      labels = c(
+        "Up" = paste0("Up (n = ", gene_counts$Up, ")"),
+        "Down" = paste0("Down (n = ", gene_counts$Down, ")"),
+        "NS" = paste0("NS (n = ", gene_counts$NS, ")")
+        )
+      ) +
+      
+      labs(
+        title = list_name,
+        x = "log2FC",
+        y = "-log10(Adj.P-value)"
+      ) +
+    
+      theme_classic(
+      ) +
+      
+      theme(
+        plot.title = element_text(
+          hjust = 0.6,
+          size = 16,
+          face = "bold"
+        ),
+        text = element_text(
+          size = 12
+        )
+      ) 
+          
+      list(
+        plot = p,
+        top = top_genes,
+        counts = gene_counts
+        #interesting_genes = genes_of_interest
+        )
+}
+
+for (i in seq_along(PHTO_toptable_results)) {
+
+  results <- generate_volcano_plot(
+    PHTO_toptable_results[[i]],
+    PHTO_toptable_list[[i]]
+  )
+## The code below gives written summaries in the console
+  cat(
+    "\n",
+    PHTO_toptable_list[[i]],
+    ": Up =", results$counts$Up,
+    "| Down =", results$counts$Down,
+    "\n"
+  )
+
+  print(results$plot) #This prints the plots
+}
+```
+
+```{r eval=FALSE, include=FALSE}
+ggplot(plot_df, aes(x = Stimulus, y = Count, fill = Status)) +
+ggplot(plot_df, aes(x = Stimulus, y = Count, fill = Status)) +
+  geom_col(position = "fill") +
+  
+  geom_text(
+    aes(
+      label = scales::comma(Count),
+      group = Status
+    ),
+    position = position_fill(vjust = 0.5),
+    size = 3
+  ) +
+  
+  scale_fill_manual(
+    values = c(
+      "H DEG" = "#F4D35E",
+      "C DEG" = "#E95D6A",
+      "non-DEG" = "grey70"
+    )
+  ) +
+  
+  scale_y_continuous(
+    labels = scales::percent_format()
+  ) +
+  
+  labs(
+    x = NULL,
+    y = "Proportion",
+    fill = "DEG Status"
+  ) +
+  
+  theme_classic() +
+  
+  theme(
+    axis.text.x = element_text(
+      size = 12,
+      face = "bold"
+    ),
+    axis.text.y = element_text(
+      size = 12,
+      face = "bold"
+    ),
+    axis.title.y = element_text(
+      size = 14,
+      face = "bold"
+    ),
+    legend.title = element_text(
+      face = "bold"
+    )
+  )
+```
+
+## Scatter plots
+```{r}
+plot_species_fc <- function(
+    toptable_list,
+    human_coef,
+    chimp_coef,
+    interaction_coef,
+    lookup_table,
+    treatment,
+    control,
+    genes_to_label = NULL,
+    bold_genes = NULL,
+    interaction_fdr = 0.05,
+    x_limits = NULL,
+    y_limits = NULL
+) {
+  
+  # ---------------------------------------------------------
+  # 1. Extract Human logFC
+  # ---------------------------------------------------------
+  
+  human_fc <- toptable_list[[human_coef]] %>%
+    tibble::rownames_to_column("Ensembl") %>%
+    dplyr::select(Ensembl, logFC) %>%
+    dplyr::rename(Human_logFC = logFC)
+  
+  
+  # ---------------------------------------------------------
+  # 2. Extract Chimp logFC
+  # ---------------------------------------------------------
+  
+  chimp_fc <- toptable_list[[chimp_coef]] %>%
+    tibble::rownames_to_column("Ensembl") %>%
+    dplyr::select(Ensembl, logFC) %>%
+    dplyr::rename(Chimp_logFC = logFC)
+  
+  
+  # ---------------------------------------------------------
+  # 3. Combine Human and Chimp logFC
+  # ---------------------------------------------------------
+  
+  fc_df <- human_fc %>%
+    dplyr::inner_join(
+      chimp_fc,
+      by = "Ensembl"
+    ) %>%
+    dplyr::left_join(
+      lookup_table %>%
+        dplyr::select(
+          Ensembl,
+          Symbol
+        ),
+      by = "Ensembl"
+    ) %>%
+    dplyr::mutate(
+      Symbol = dplyr::if_else(
+        is.na(Symbol),
+        Ensembl,
+        Symbol
+      )
+    )
+  
+  
+  # ---------------------------------------------------------
+  # 4. Identify significant interaction genes
+  # ---------------------------------------------------------
+  
+  interaction_sig_genes <- toptable_list[[interaction_coef]] %>%
+    tibble::rownames_to_column("Ensembl") %>%
+    dplyr::filter(adj.P.Val < interaction_fdr) %>%
+    dplyr::pull(Ensembl)
+  
+  
+  # ---------------------------------------------------------
+  # 5. Determine direction of response
+  # ---------------------------------------------------------
+  
+  interaction_df <- fc_df %>%
+    dplyr::filter(
+      Ensembl %in% interaction_sig_genes
+    ) %>%
+    dplyr::mutate(
+      Direction = dplyr::case_when(
+        Human_logFC > 0 & Chimp_logFC > 0 ~ "Human ↑, Chimp ↑",
+        Human_logFC < 0 & Chimp_logFC < 0 ~ "Human ↓, Chimp ↓",
+        Human_logFC > 0 & Chimp_logFC < 0 ~ "Human ↑, Chimp ↓",
+        Human_logFC < 0 & Chimp_logFC > 0 ~ "Human ↓, Chimp ↑",
+        TRUE ~ "Zero/NA"
+      )
+    )
+  
+  
+  # ---------------------------------------------------------
+  # 6. Count interaction directions
+  # ---------------------------------------------------------
+  
+  direction_counts <- interaction_df %>%
+    dplyr::count(Direction)
+  
+  
+  # ---------------------------------------------------------
+  # 7. Select genes to label
+  # ---------------------------------------------------------
+  
+  if (!is.null(genes_to_label)) {
+    
+    label_df <- fc_df %>%
+      dplyr::filter(
+        Symbol %in% genes_to_label
+      )
+    
+  } else {
+    
+    label_df <- fc_df[0, ]
+    
+  }
+  
+  
+  # ---------------------------------------------------------
+  # 8. Number of significant interaction genes
+  # ---------------------------------------------------------
+  
+  n_interaction <- nrow(interaction_df)
+  
+  # ---------------------------------------------------------
+  # 9. Calculate Pearson correlation and p-value
+  # ---------------------------------------------------------
+  
+  # Remove missing values before correlation test
+  cor_df <- fc_df %>%
+    dplyr::filter(
+      !is.na(Human_logFC),
+      !is.na(Chimp_logFC)
+    )
+  
+  # Pearson correlation test
+  cor_test <- stats::cor.test(
+    cor_df$Human_logFC,
+    cor_df$Chimp_logFC,
+    method = "pearson"
+  )
+  
+  # Extract Pearson r
+  pearson_r <- unname(
+    cor_test$estimate
+  )
+  
+  # Extract p-value
+  pearson_p <- cor_test$p.value
+  
+  
+  # Format p-value for figure
+  pearson_p_label <- ifelse(
+    pearson_p < 0.001,
+    "p < 0.001",
+    paste0(
+      "p = ",
+      sprintf("%.3f", pearson_p)
+    )
+  )
+  
+  
+  # Create label for figure
+  cor_label <- paste0(
+    "Pearson r = ",
+    sprintf("%.2f", pearson_r),
+    "\n",
+    pearson_p_label
+  )
+  
+  # ---------------------------------------------------------
+  # 10. Create plot
+  # ---------------------------------------------------------
+  
+  p <- ggplot2::ggplot(
+    fc_df,
+    ggplot2::aes(
+      x = Human_logFC,
+      y = Chimp_logFC
+    )
+  ) +
+    
+    ggplot2::geom_point(
+      color = "grey47",
+      alpha = 0.6,
+      size = 1
+    ) +
+    
+    ggplot2::geom_point(
+      data = interaction_df %>%
+        dplyr::filter(Direction != "Zero/NA"),
+      ggplot2::aes(color = Direction),
+      size = 1.5
+    ) +
+    
+    ggrepel::geom_text_repel(
+      data = label_df,
+      ggplot2::aes(
+        label = Symbol,
+        fontface = ifelse(
+          Symbol %in% bold_genes,
+          "bold.italic",
+          "plain"
+        )
+      ),
+      size = 3,
+      max.overlaps = Inf,
+      box.padding = 2,
+      point.padding = 0.15,
+      force = 2
+    ) +
+    
+    ggplot2::scale_colour_manual(
+      values = c(
+        "Human ↑, Chimp ↑" = "maroon",
+        "Human ↓, Chimp ↓" = "dodgerblue4",
+        "Human ↑, Chimp ↓" = "purple3",
+        "Human ↓, Chimp ↑" = "green4"
+      )
+    ) +
+    
+    ggplot2::geom_vline(
+      xintercept = 0,
+      linetype = "dashed"
+    ) +
+    
+    ggplot2::geom_hline(
+      yintercept = 0,
+      linetype = "dashed"
+    ) +
+    
+    # Pearson r and p-value
+    ggplot2::annotate(
+      "text",
+      x = Inf,
+      y = Inf,
+      label = cor_label,
+      hjust = 1.1,
+      vjust = 1.3,
+      size = 3
+    ) +
+    
+    ggplot2::theme_classic() +
+    
+    ggplot2::labs(
+      x = paste0(
+        "Human ",
+        treatment,
+        " vs ",
+        control,
+        " logFC"
+      ),
+      y = paste0(
+        "Chimp ",
+        treatment,
+        " vs ",
+        control,
+        " logFC"
+      ),
+      title = paste0(
+        "Cross-species ",
+        treatment,
+        " response correlation"
+      ),
+      color = paste0(
+        "Interaction Gene\nDirections (n = ",
+        n_interaction,
+        ")"
+      )
+    ) +
+    
+    ggplot2::theme(
+      legend.position = c(0.15, 0.80)
+    )
+  
+  # ---------------------------------------------------------
+  # 11. Optional axis limits
+  # ---------------------------------------------------------
+  
+  if (!is.null(x_limits) | !is.null(y_limits)) {
+    
+    p <- p +
+      ggplot2::coord_cartesian(
+        xlim = x_limits,
+        ylim = y_limits
+      )
+  }
+  
+  
+  # ---------------------------------------------------------
+  # 12. Return everything
+  # ---------------------------------------------------------
+  
+  return(
+    list(
+      plot = p,
+      fc_df = fc_df,
+      interaction_df = interaction_df,
+      direction_counts = direction_counts,
+      n_interaction = n_interaction,
+      pearson_r = pearson_r,
+      pearson_p = pearson_p
+    )
+  )
+}
+```
+
+```{r}
+comparison_table <- tibble::tribble(
+  ~treatment, ~control, ~human_coef,       ~chimp_coef,       ~interaction_coef,
+  
+  "TNFa",     "H2O",    "H_TNFavH2O",     "C_TNFavH2O",     "Int_TNFa",
+  "LPS",      "H2O",    "H_LPSvH2O",      "C_LPSvH2O",      "Int_LPS",
+  "DOX",      "DMSO",   "H_DOXvDMSO",     "C_DOXvDMSO",     "Int_DOX",
+  "NUTL",     "DMSO",   "H_NUTLvDMSO",    "C_NUTLvDMSO",    "Int_NUTL",
+  "TUN",      "DMSO",   "H_TUNvDMSO",     "C_TUNvDMSO",     "Int_TUN",
+  "THA",      "DMSO",   "H_THAvDMSO",     "C_THAvDMSO",     "Int_THA"
+)
+
+comparison_table
+```
+
+```{r}
+plot_all_species_fc <- function(
+    toptable_list,
+    comparison_table,
+    lookup_table,
+    genes_to_label = NULL,
+    bold_genes = NULL,
+    interaction_fdr = 0.05,
+    x_limits = NULL,
+    y_limits = NULL
+) {
+  
+  results <- purrr::pmap(
+    
+    comparison_table,
+    
+    function(
+      treatment,
+      control,
+      human_coef,
+      chimp_coef,
+      interaction_coef
+    ) {
+      
+      plot_species_fc(
+        toptable_list = toptable_list,
+        human_coef = human_coef,
+        chimp_coef = chimp_coef,
+        interaction_coef = interaction_coef,
+        lookup_table = lookup_table,
+        treatment = treatment,
+        control = control,
+        genes_to_label = genes_to_label,
+        bold_genes = bold_genes,
+        interaction_fdr = interaction_fdr,
+        x_limits = x_limits,
+        y_limits = y_limits
+      )
+      
+    }
+  )
+  
+  
+  # Name each result according to treatment
+  
+  names(results) <- comparison_table$treatment
+  
+  
+  return(results)
+}
+```
+
+```{r}
+PHTO_fc_results <- plot_all_species_fc(
+  toptable_list = PHTO_toptable_results,
+  comparison_table = comparison_table,
+  lookup_table = PHTO_lookup_table,
+  interaction_fdr = 0.05
+)
+
+PHTO_fc_results$TUN$plot
+
+purrr::walk(
+  PHTO_fc_results,
+  ~ print(.x$plot)
+)
+
+interaction_summary <- purrr::imap_dfr(
+  PHTO_fc_results,
+  function(x, treatment) {
+    
+    x$direction_counts %>%
+      dplyr::mutate(
+        Treatment = treatment,
+        Total_Interaction_Genes = x$n_interaction
+      )
+    
+  }
+) %>%
+  dplyr::select(
+    Treatment,
+    Direction,
+    n,
+    Total_Interaction_Genes
+  )
+
+interaction_summary
+
+PHTO_pearson_summary <- purrr::imap_dfr(
+  PHTO_fc_results,
+  function(result, treatment) {
+    
+    tibble::tibble(
+      Treatment = treatment,
+      Pearson_r = result$pearson_r,
+      Pearson_p = result$pearson_p
+    )
+  }
+)
+
+PHTO_pearson_summary
+```
+
+## Significant Interaction Gene Column Charts
+```{r}
+plot_interaction_direction_counts <- function(
+    result,
+    treatment,
+    y_limits = NULL,
+    y_breaks = NULL
+) {
+  
+  # ---------------------------------------------------------
+  # 1. Count interaction gene directions
+  # ---------------------------------------------------------
+  
+  interaction_counts <- result$interaction_df %>%
+    dplyr::filter(Direction != "Zero/NA") %>%
+    dplyr::mutate(
+      
+      Direction_group = dplyr::case_when(
+        
+        Direction %in% c(
+          "Human ↑, Chimp ↑",
+          "Human ↓, Chimp ↓"
+        ) ~ "Same Direction",
+        
+        Direction %in% c(
+          "Human ↑, Chimp ↓",
+          "Human ↓, Chimp ↑"
+        ) ~ "Opposite Direction",
+        
+        TRUE ~ NA_character_
+      )
+    ) %>%
+    dplyr::filter(!is.na(Direction_group)) %>%
+    dplyr::count(
+      Direction_group,
+      Direction
+    )
+  
+  
+  # ---------------------------------------------------------
+  # 2. Calculate total genes in each group
+  # ---------------------------------------------------------
+  
+  x_labels <- interaction_counts %>%
+    dplyr::group_by(Direction_group) %>%
+    dplyr::summarise(
+      total = sum(n),
+      .groups = "drop"
+    )
+  
+  
+  # ---------------------------------------------------------
+  # 3. Create labels
+  # ---------------------------------------------------------
+  
+  same_n <- x_labels %>%
+    dplyr::filter(Direction_group == "Same Direction") %>%
+    dplyr::pull(total)
+  
+  opposite_n <- x_labels %>%
+    dplyr::filter(Direction_group == "Opposite Direction") %>%
+    dplyr::pull(total)
+  
+  
+  # If one category contains zero genes
+  if (length(same_n) == 0) {
+    same_n <- 0
+  }
+  
+  if (length(opposite_n) == 0) {
+    opposite_n <- 0
+  }
+  
+  
+  # ---------------------------------------------------------
+  # 4. Create plot
+  # ---------------------------------------------------------
+  
+  p <- ggplot2::ggplot(
+    interaction_counts,
+    ggplot2::aes(
+      x = Direction_group,
+      y = n,
+      fill = Direction
+    )
+  ) +
+    
+    ggplot2::geom_col() +
+    
+    ggplot2::geom_text(
+      ggplot2::aes(label = n),
+      position = ggplot2::position_stack(vjust = 0.5),
+      fontface = "bold",
+      color = "white",
+      size = 6
+    ) +
+    
+    ggplot2::scale_x_discrete(
+      limits = c(
+        "Same Direction",
+        "Opposite Direction"
+      ),
+      labels = c(
+        
+        "Same Direction" = paste0(
+          "Same Direction\n(n = ",
+          same_n,
+          ")"
+        ),
+        
+        "Opposite Direction" = paste0(
+          "Opposite Direction\n(n = ",
+          opposite_n,
+          ")"
+        )
+      )
+    ) +
+    
+    ggplot2::scale_fill_manual(
+      values = c(
+        "Human ↑, Chimp ↑" = "maroon",
+        "Human ↓, Chimp ↓" = "dodgerblue4",
+        "Human ↑, Chimp ↓" = "purple3",
+        "Human ↓, Chimp ↑" = "green4"
+      ),
+      drop = FALSE
+    ) +
+    
+    ggplot2::labs(
+      x = NULL,
+      y = "Number of DEGs",
+      title = paste0(
+        treatment,
+        " significant interaction genes"
+      ),
+      fill = NULL
+    ) +
+    
+    ggplot2::coord_flip() +
+    
+    ggplot2::theme_classic() +
+    
+    ggplot2::theme(
+      
+      axis.title.x = ggplot2::element_text(
+        size = 24,
+        face = "bold"
+      ),
+      
+      axis.title.y = ggplot2::element_text(
+        size = 24,
+        face = "bold"
+      ),
+      
+      axis.text.x = ggplot2::element_text(
+        size = 20,
+        face = "bold"
+      ),
+      
+      axis.text.y = ggplot2::element_text(
+        size = 20,
+        face = "bold"
+      ),
+      
+      plot.title = ggplot2::element_text(
+        size = 22,
+        face = "bold",
+        hjust = 0.5
+      )
+    )
+  
+  
+  # ---------------------------------------------------------
+  # 5. Optional y-axis settings
+  # ---------------------------------------------------------
+  
+  if (!is.null(y_limits) | !is.null(y_breaks)) {
+    
+    p <- p +
+      ggplot2::scale_y_continuous(
+        limits = y_limits,
+        breaks = y_breaks
+      )
+  }
+  
+  
+  # ---------------------------------------------------------
+  # 6. Return plot AND data
+  # ---------------------------------------------------------
+  
+  return(
+    list(
+      plot = p,
+      interaction_counts = interaction_counts,
+      group_totals = x_labels
+    )
+  )
+}
+```
+
+```{r, fig.width=12, fig.height=6}
+TNFa_direction_result <- plot_interaction_direction_counts(
+  result = PHTO_fc_results$TNFa,
+  treatment = "TNFα"
+)
+TNFa_direction_result$plot
+TNFa_direction_result$interaction_counts
+TNFa_direction_result$group_totals
+
+plot_all_interaction_directions <- function(
+    PHTO_fc_results,
+    y_limits = NULL,
+    y_breaks = NULL
+) {
+  
+  treatment_labels <- c(
+    "TNFa" = "TNFα",
+    "LPS"  = "LPS",
+    "DOX"  = "DOX",
+    "NUTL" = "NUTL",
+    "TUN"  = "TUN",
+    "THA"  = "THA"
+  )
+  
+  
+  results <- purrr::imap(
+    PHTO_fc_results,
+    
+    function(result, treatment_name) {
+      
+      plot_interaction_direction_counts(
+        result = result,
+        treatment = treatment_labels[[treatment_name]],
+        y_limits = y_limits,
+        y_breaks = y_breaks
+      )
+      
+    }
+  )
+  
+  
+  return(results)
+}
+
+PHTO_direction_results <- plot_all_interaction_directions(
+  PHTO_fc_results
+  # ,
+  # y_limits = c(0, 1000),
+  # y_breaks = seq(0, 1000, by = 250)
+)
+
+PHTO_direction_results$TNFa$plot
+PHTO_direction_results$LPS$plot
+PHTO_direction_results$TUN$plot
+PHTO_direction_results$THA$plot
+PHTO_direction_results$NUTL$plot
+PHTO_direction_results$DOX$plot
+
+
+PHTO_direction_summary <- purrr::imap_dfr(
+  PHTO_direction_results,
+  
+  function(result, treatment) {
+    
+    result$interaction_counts %>%
+      dplyr::mutate(
+        Treatment = treatment
+      )
+    
+  }
+) %>%
+  dplyr::select(
+    Treatment,
+    Direction_group,
+    Direction,
+    n
+  )
+
+PHTO_direction_summary <- PHTO_direction_summary %>%
+  dplyr::group_by(Treatment) %>%
+  dplyr::mutate(
+    Total = sum(n),
+    Percent = 100 * n / Total
+  ) %>%
+  dplyr::ungroup()
+
+PHTO_direction_summary
+```
+
