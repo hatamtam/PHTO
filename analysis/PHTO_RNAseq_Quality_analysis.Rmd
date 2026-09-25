@@ -238,14 +238,26 @@ spearman_df <- after_tbl %>%
 
 attribute_labels_df <- cleaned_metadata_24hr %>%
    select(Sex, Species, Ind, Stimulus, Final_sample_name) %>%
-   column_to_rownames(var = "Final_sample_name") %>% 
-   as.tibble()
+   column_to_rownames("Final_sample_name") %>% 
+   as.data.frame()
+
 #head(attribute_labels_df)
  
- spearman_cor <- cor(
+spearman_cor <- cor(
    spearman_df,
    method = "spearman"
  )
+ 
+attribute_labels_df <- attribute_labels_df[
+  colnames(spearman_cor),
+  ,
+  drop = FALSE
+]
+## This is to verify that the spearman_cor data frame and attribute_labels_df have the same ordering so that the heatmap clusters appropriately, we want the output to be TRUE 
+# identical(
+#   rownames(attribute_labels_df),
+#   colnames(spearman_cor)
+# )
  
  individual_colors <- structure(
    # brewer.pal(12, "Set3"), ## I would use this line of code if I had 12 unique Individuals. However, I have 14, so I need to use the one below to generate colors outside of the main 12 colors in the brwer.pal structure
@@ -288,7 +300,7 @@ attribute_labels_df <- cleaned_metadata_24hr %>%
    width = unit(24, "cm"),
    height = unit(20, "cm"),
    row_names_gp = gpar(fontsize = 6),
-   column_names_gp = gpar(fontsize = 6), 
+   column_names_gp = gpar(fontsize = 6),
    top_annotation = heatmap_anno
  )
 
@@ -331,15 +343,26 @@ pca_anno <- pca_df %>%
 
 head(pca_anno)
 
-ggplot(pca_analysis, aes(x = Component , y = Variance)) +
-  geom_bar(stat = "identity", fill = "maroon") +
-  geom_line() +
+ggplot(
+  pca_analysis %>%
+    dplyr::filter(Component <= 10),
+  aes(x = Component, y = Variance)
+  ) +
+  geom_bar(
+    stat = "identity",
+    fill = "maroon"
+  ) +
+  geom_line(
+    aes(group = 1)
+  ) +
   geom_point() +
+  scale_x_continuous(
+    breaks = 1:10
+  ) +
   xlab("Principal Components") +
-  ylab("Proportion of Variances") +
-  ggtitle(" Analysis of Components Contributing to Variance") +
+  ylab("Proportion of Variance (%)") +
+  ggtitle("Analysis of Components Contributing to Variance") +
   theme_bw()
-
 ```
 
 
@@ -474,9 +497,6 @@ plots_of_pcas <- lapply(names(facs), function(f_label) {
 })
 
 ```
-
-
-
 
 ### PCA plot demonstrating Species/Sex/Individual (PC1) and Treatment (PC2) stratification
 ```{r This chunk of code is my attempt at creating PCA plots to illustrate which factors contribute to varience between samples}
