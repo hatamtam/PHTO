@@ -513,15 +513,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree5723ea55cfba534b3495a3fd35bd08f84a8f105etargetblank5723ea5a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree1829c14ab3f1f1a1808dc94b5df19bc988da593ftargetblank1829c14a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/hatamtam/PHTO/tree/5723ea55cfba534b3495a3fd35bd08f84a8f105e" target="_blank">5723ea5</a>
+<a href="https://github.com/hatamtam/PHTO/tree/1829c14ab3f1f1a1808dc94b5df19bc988da593f" target="_blank">1829c14</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree5723ea55cfba534b3495a3fd35bd08f84a8f105etargetblank5723ea5a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree1829c14ab3f1f1a1808dc94b5df19bc988da593ftargetblank1829c14a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -531,7 +531,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/hatamtam/PHTO/tree/5723ea55cfba534b3495a3fd35bd08f84a8f105e" target="_blank">5723ea5</a>.
+<a href="https://github.com/hatamtam/PHTO/tree/1829c14ab3f1f1a1808dc94b5df19bc988da593f" target="_blank">1829c14</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -608,6 +608,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/1829c14ab3f1f1a1808dc94b5df19bc988da593f/analysis/PHTO_DGE_Analysis.Rmd" target="_blank">1829c14</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+<td>
+wflow_publish("analysis/PHTO_DGE_Analysis.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/hatamtam/PHTO/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/PHTO_DGE_Analysis.html" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -792,13 +826,13 @@ filtered_counts &lt;- working_counts_file[rowMeans(log2cpm)&gt; 0,]
 # dim(filtered_counts)
 # str(filtered_counts)</code></pre>
 </div>
-<div
-id="using-model.matrix-species-stimulus-using-chimp-and-h2o-as-my-primary-references.-dmso-will-be-used-as-the-appropriate-control-for-upr-and-ddr-stimuli-but-will-be-constrasted-against-h2o-to-ensure-the-h2o-control-does-not-weigh-into-the-analyses-of-upr-and-ddr-stimuli"
+<div id="generating-dges-and-applying-constrast-matrix"
 class="section level2">
-<h2>Using model.matrix (~ Species * Stimulus), using Chimp and H2O as my
+<h2>Generating DGEs and applying constrast matrix</h2>
+<p>Using model.matrix (~ Species * Stimulus), using Chimp and H2O as my
 primary references. DMSO will be used as the appropriate control for UPR
 and DDR stimuli, but will be constrasted against H2O to ensure the H2O
-control does not weigh into the analyses of UPR and DDR stimuli</h2>
+control does not weigh into the analyses of UPR and DDR stimuli</p>
 <pre class="r"><code>filtered_counts &lt;- filtered_counts[, working_metadata_file$Final_sample_name] # Run this to explicitly ensure sample ordering is identical between counts and metadata file
 
 # # Creating DDR-specific DGE list
@@ -1031,6 +1065,43 @@ Up                  1928              26</code></pre>
 <pre><code>[1] 29</code></pre>
 <pre class="r"><code>plotSA(all_dge_efit2, main = &quot;Mean-variance All Response Samples final model trend&quot;)</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-4-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-4-1.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="toptable-assignments" class="section level2">
 <h2>Toptable Assignments</h2>
@@ -3225,7 +3296,234 @@ purrr::walk(
   PHTO_fc_results,
   ~ print(.x$plot)
 )</code></pre>
-<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-1.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-2.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-3.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-4.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-5.png" alt="" width="768" style="display: block; margin: auto;" /><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-6.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
+Past versions of unnamed-chunk-9-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-1.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-2">
+Past versions of unnamed-chunk-9-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-2.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-3.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-3">
+Past versions of unnamed-chunk-9-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-3.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-4.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-4">
+Past versions of unnamed-chunk-9-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-4.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-5.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-5">
+Past versions of unnamed-chunk-9-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-5.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-6.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-6">
+Past versions of unnamed-chunk-9-6.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-9-6.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>interaction_summary &lt;- purrr::imap_dfr(
   PHTO_fc_results,
   function(x, treatment) {
@@ -3535,16 +3833,238 @@ PHTO_direction_results &lt;- plot_all_interaction_directions(
 
 PHTO_direction_results$TNFa$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-11-1.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
+Past versions of unnamed-chunk-11-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-11-1.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>PHTO_direction_results$LPS$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-11-2.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-2">
+Past versions of unnamed-chunk-11-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-11-2.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>PHTO_direction_results$TUN$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-11-3.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-3">
+Past versions of unnamed-chunk-11-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-11-3.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>PHTO_direction_results$THA$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-11-4.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-4">
+Past versions of unnamed-chunk-11-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-11-4.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>PHTO_direction_results$NUTL$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-11-5.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-5">
+Past versions of unnamed-chunk-11-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-11-5.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>PHTO_direction_results$DOX$plot</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-11-6.png" alt="" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-6">
+Past versions of unnamed-chunk-11-6.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-11-6.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>PHTO_direction_summary &lt;- purrr::imap_dfr(
   PHTO_direction_results,
   
@@ -3875,7 +4395,7 @@ for (i in seq_along(gprofiler2_results)) {
 [1/29] Starting HvC_H2O | DEGs = 5324 | Background = 14217
 Running enrichment: HvC_H2O</code></pre>
 <pre><code>No enriched terms for HvC_H2O
-[1/29] Completed HvC_H2O in 6.9 seconds
+[1/29] Completed HvC_H2O in 5.9 seconds
 
 [2/29] Starting C_DMSOvH2O | DEGs = 0 | Background = 14217
 No DEGs for C_DMSOvH2O
@@ -3888,7 +4408,7 @@ No DEGs for H_DMSOvH2O
 [4/29] Starting HvC_DMSO | DEGs = 5087 | Background = 14217
 Running enrichment: HvC_DMSO</code></pre>
 <pre><code>No enriched terms for HvC_DMSO
-[4/29] Completed HvC_DMSO in 9.7 seconds
+[4/29] Completed HvC_DMSO in 4 seconds
 
 [5/29] Starting Int_DMSO | DEGs = 0 | Background = 14217
 No DEGs for Int_DMSO
@@ -3897,17 +4417,17 @@ No DEGs for Int_DMSO
 [6/29] Starting C_TNFavH2O | DEGs = 132 | Background = 14217
 Running enrichment: C_TNFavH2O</code></pre>
 <pre><code>Finished enrichment: C_TNFavH2O
-[6/29] Completed C_TNFavH2O in 13.7 seconds
+[6/29] Completed C_TNFavH2O in 3.2 seconds
 
 [7/29] Starting H_TNFavH2O | DEGs = 41 | Background = 14217
 Running enrichment: H_TNFavH2O</code></pre>
 <pre><code>Finished enrichment: H_TNFavH2O
-[7/29] Completed H_TNFavH2O in 4 seconds
+[7/29] Completed H_TNFavH2O in 3.1 seconds
 
 [8/29] Starting HvC_TNFa | DEGs = 5147 | Background = 14217
 Running enrichment: HvC_TNFa</code></pre>
 <pre><code>No enriched terms for HvC_TNFa
-[8/29] Completed HvC_TNFa in 8.8 seconds
+[8/29] Completed HvC_TNFa in 7.2 seconds
 
 [9/29] Starting Int_TNFa | DEGs = 0 | Background = 14217
 No DEGs for Int_TNFa
@@ -3916,17 +4436,17 @@ No DEGs for Int_TNFa
 [10/29] Starting C_LPSvH2O | DEGs = 13 | Background = 14217
 Running enrichment: C_LPSvH2O</code></pre>
 <pre><code>Finished enrichment: C_LPSvH2O
-[10/29] Completed C_LPSvH2O in 3 seconds
+[10/29] Completed C_LPSvH2O in 8.6 seconds
 
 [11/29] Starting H_LPSvH2O | DEGs = 1 | Background = 14217
 Running enrichment: H_LPSvH2O</code></pre>
 <pre><code>Finished enrichment: H_LPSvH2O
-[11/29] Completed H_LPSvH2O in 3.5 seconds
+[11/29] Completed H_LPSvH2O in 2.6 seconds
 
 [12/29] Starting HvC_LPS | DEGs = 5515 | Background = 14217
 Running enrichment: HvC_LPS</code></pre>
 <pre><code>Finished enrichment: HvC_LPS
-[12/29] Completed HvC_LPS in 10.1 seconds
+[12/29] Completed HvC_LPS in 4.6 seconds
 
 [13/29] Starting Int_LPS | DEGs = 0 | Background = 14217
 No DEGs for Int_LPS
@@ -3935,17 +4455,17 @@ No DEGs for Int_LPS
 [14/29] Starting HvC_DOX | DEGs = 5316 | Background = 14217
 Running enrichment: HvC_DOX</code></pre>
 <pre><code>Finished enrichment: HvC_DOX
-[14/29] Completed HvC_DOX in 12.8 seconds
+[14/29] Completed HvC_DOX in 4.4 seconds
 
 [15/29] Starting C_DOXvDMSO | DEGs = 9374 | Background = 14217
 Running enrichment: C_DOXvDMSO</code></pre>
 <pre><code>Finished enrichment: C_DOXvDMSO
-[15/29] Completed C_DOXvDMSO in 10.2 seconds
+[15/29] Completed C_DOXvDMSO in 9.9 seconds
 
 [16/29] Starting H_DOXvDMSO | DEGs = 9031 | Background = 14217
 Running enrichment: H_DOXvDMSO</code></pre>
 <pre><code>Finished enrichment: H_DOXvDMSO
-[16/29] Completed H_DOXvDMSO in 13.8 seconds
+[16/29] Completed H_DOXvDMSO in 11.1 seconds
 
 [17/29] Starting Int_DOX | DEGs = 1538 | Background = 14217
 Running enrichment: Int_DOX</code></pre>
@@ -3955,22 +4475,22 @@ Running enrichment: Int_DOX</code></pre>
 [18/29] Starting HvC_NUTL | DEGs = 5437 | Background = 14217
 Running enrichment: HvC_NUTL</code></pre>
 <pre><code>Finished enrichment: HvC_NUTL
-[18/29] Completed HvC_NUTL in 4.6 seconds
+[18/29] Completed HvC_NUTL in 9 seconds
 
 [19/29] Starting C_NUTLvDMSO | DEGs = 1112 | Background = 14217
 Running enrichment: C_NUTLvDMSO</code></pre>
 <pre><code>Finished enrichment: C_NUTLvDMSO
-[19/29] Completed C_NUTLvDMSO in 11.3 seconds
+[19/29] Completed C_NUTLvDMSO in 3.3 seconds
 
 [20/29] Starting H_NUTLvDMSO | DEGs = 1169 | Background = 14217
 Running enrichment: H_NUTLvDMSO</code></pre>
 <pre><code>Finished enrichment: H_NUTLvDMSO
-[20/29] Completed H_NUTLvDMSO in 3.7 seconds
+[20/29] Completed H_NUTLvDMSO in 4 seconds
 
 [21/29] Starting Int_NUTL | DEGs = 2 | Background = 14217
 Running enrichment: Int_NUTL</code></pre>
 <pre><code>Finished enrichment: Int_NUTL
-[21/29] Completed Int_NUTL in 5.3 seconds
+[21/29] Completed Int_NUTL in 7.9 seconds
 
 [22/29] Starting HvC_TUN | DEGs = 5036 | Background = 14217
 Running enrichment: HvC_TUN</code></pre>
@@ -3980,37 +4500,37 @@ Running enrichment: HvC_TUN</code></pre>
 [23/29] Starting C_TUNvDMSO | DEGs = 3540 | Background = 14217
 Running enrichment: C_TUNvDMSO</code></pre>
 <pre><code>Finished enrichment: C_TUNvDMSO
-[23/29] Completed C_TUNvDMSO in 3.4 seconds
+[23/29] Completed C_TUNvDMSO in 5.2 seconds
 
 [24/29] Starting H_TUNvDMSO | DEGs = 3506 | Background = 14217
 Running enrichment: H_TUNvDMSO</code></pre>
 <pre><code>Finished enrichment: H_TUNvDMSO
-[24/29] Completed H_TUNvDMSO in 4.1 seconds
+[24/29] Completed H_TUNvDMSO in 12.2 seconds
 
 [25/29] Starting Int_TUN | DEGs = 26 | Background = 14217
 Running enrichment: Int_TUN</code></pre>
 <pre><code>No enriched terms for Int_TUN
-[25/29] Completed Int_TUN in 11.3 seconds
+[25/29] Completed Int_TUN in 7.7 seconds
 
 [26/29] Starting HvC_THA | DEGs = 5118 | Background = 14217
 Running enrichment: HvC_THA</code></pre>
 <pre><code>No enriched terms for HvC_THA
-[26/29] Completed HvC_THA in 4.3 seconds
+[26/29] Completed HvC_THA in 3.8 seconds
 
 [27/29] Starting C_THAvDMSO | DEGs = 4607 | Background = 14217
 Running enrichment: C_THAvDMSO</code></pre>
 <pre><code>Finished enrichment: C_THAvDMSO
-[27/29] Completed C_THAvDMSO in 4.4 seconds
+[27/29] Completed C_THAvDMSO in 13.3 seconds
 
 [28/29] Starting H_THAvDMSO | DEGs = 4257 | Background = 14217
 Running enrichment: H_THAvDMSO</code></pre>
 <pre><code>Finished enrichment: H_THAvDMSO
-[28/29] Completed H_THAvDMSO in 3.7 seconds
+[28/29] Completed H_THAvDMSO in 7.7 seconds
 
 [29/29] Starting Int_THA | DEGs = 44 | Background = 14217
 Running enrichment: Int_THA</code></pre>
 <pre><code>No enriched terms for Int_THA
-[29/29] Completed Int_THA in 7.9 seconds</code></pre>
+[29/29] Completed Int_THA in 3.2 seconds</code></pre>
 <pre class="r"><code># =========================================================
 # 4. Combine enrichment results
 # =========================================================
@@ -4200,64 +4720,1100 @@ for (comp in unique(gprofiler2_results_df$comparison)) {
   
 }  # closes the for loop: for (comp in ...)</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-1.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-1">
+Past versions of "KEGG terms-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-1.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: C_TNFavH2O - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-2.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-2">
+Past versions of "KEGG terms-2.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-2.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: C_TNFavH2O - KEGG</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-3.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-3">
+Past versions of "KEGG terms-3.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-3.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: H_TNFavH2O - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-4.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-4">
+Past versions of "KEGG terms-4.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-4.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: H_TNFavH2O - KEGG</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-5.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-5">
+Past versions of "KEGG terms-5.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-5.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: C_LPSvH2O - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-6.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-6">
+Past versions of "KEGG terms-6.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-6.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: C_LPSvH2O - KEGG</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-7.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-7">
+Past versions of "KEGG terms-7.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-7.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: H_LPSvH2O - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-8.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-8">
+Past versions of "KEGG terms-8.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-8.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: H_LPSvH2O - KEGG
 No graph generated: HvC_LPS - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-9.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-9">
+Past versions of "KEGG terms-9.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-9" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-9.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: HvC_LPS - KEGG</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-10.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-10">
+Past versions of "KEGG terms-10.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-10" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-10.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: HvC_DOX - GO:BP
 No graph generated: HvC_DOX - KEGG</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-11.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-11">
+Past versions of "KEGG terms-11.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-11" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-11.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: C_DOXvDMSO - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-12.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-12">
+Past versions of "KEGG terms-12.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-12" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-12.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: C_DOXvDMSO - KEGG</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-13.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-13">
+Past versions of "KEGG terms-13.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-13" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-13.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: H_DOXvDMSO - GO:BP
 No graph generated: H_DOXvDMSO - KEGG
 No graph generated: HvC_NUTL - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-14.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-14">
+Past versions of "KEGG terms-14.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-14" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-14.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: HvC_NUTL - KEGG</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-15.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-15">
+Past versions of "KEGG terms-15.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-15" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-15.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: C_NUTLvDMSO - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-16.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-16">
+Past versions of "KEGG terms-16.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-16" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-16.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: C_NUTLvDMSO - KEGG</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-17.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-17">
+Past versions of "KEGG terms-17.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-17" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-17.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: H_NUTLvDMSO - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-18.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-18">
+Past versions of "KEGG terms-18.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-18" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-18.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: H_NUTLvDMSO - KEGG</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-19.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-19">
+Past versions of "KEGG terms-19.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-19" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-19.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: Int_NUTL - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-20.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-20">
+Past versions of "KEGG terms-20.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-20" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-20.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: Int_NUTL - KEGG</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-21.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-21">
+Past versions of "KEGG terms-21.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-21" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-21.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: C_TUNvDMSO - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-22.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-22">
+Past versions of "KEGG terms-22.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-22" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-22.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: C_TUNvDMSO - KEGG</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-23.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-23">
+Past versions of "KEGG terms-23.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-23" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-23.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: H_TUNvDMSO - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-24.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-24">
+Past versions of "KEGG terms-24.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-24" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-24.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: H_TUNvDMSO - KEGG</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-25.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-25">
+Past versions of "KEGG terms-25.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-25" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-25.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: C_THAvDMSO - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-26.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-26">
+Past versions of "KEGG terms-26.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-26" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-26.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: C_THAvDMSO - KEGG</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-27.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-27">
+Past versions of "KEGG terms-27.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-27" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-27.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: H_THAvDMSO - GO:BP</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/Generating%20figures%20illustrating%20GO/KEGG%20terms-28.png" alt="" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-KEGG-terms-28">
+Past versions of "KEGG terms-28.png"
+</button>
+</p>
+<div id="fig-no-spaces-KEGG-terms-28" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/Generating figures illustrating GO/KEGG terms-28.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>Finished graph: H_THAvDMSO - KEGG</code></pre>
 <pre class="r"><code># # If I want to save my GO:BP dot plot graphs
 # ggsave(
@@ -4602,21 +6158,243 @@ names(DEG_plots) &lt;- c(
 DEG_plots</code></pre>
 <pre><code>$DOX</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-14-1.png" alt="" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
+Past versions of unnamed-chunk-14-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-14-1.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 $NUTL</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-14-2.png" alt="" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-2">
+Past versions of unnamed-chunk-14-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-14-2.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 $TUN</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-14-3.png" alt="" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-3">
+Past versions of unnamed-chunk-14-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-14-3.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 $THA</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-14-4.png" alt="" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-4">
+Past versions of unnamed-chunk-14-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-14-4.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 $TNFa</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-14-5.png" alt="" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-5">
+Past versions of unnamed-chunk-14-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-14-5.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>
 $LPS</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-14-6.png" alt="" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-6">
+Past versions of unnamed-chunk-14-6.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-14-6.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div
@@ -4819,16 +6597,238 @@ names(DEG_venn_plots) &lt;- venn_comparisons$Treatment
 
 DEG_venn_plots$DOX</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-16-1.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-1">
+Past versions of unnamed-chunk-16-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-16-1.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>DEG_venn_plots$NUTL</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-16-2.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-2">
+Past versions of unnamed-chunk-16-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-16-2.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>DEG_venn_plots$TUN</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-16-3.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-3">
+Past versions of unnamed-chunk-16-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-16-3.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>DEG_venn_plots$THA</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-16-4.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-4">
+Past versions of unnamed-chunk-16-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-16-4.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>DEG_venn_plots$TNFa</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-16-5.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-5">
+Past versions of unnamed-chunk-16-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-16-5.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>DEG_venn_plots$LPS</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-16-6.png" alt="" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-6">
+Past versions of unnamed-chunk-16-6.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-16-6.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="creating-upset-plots-for-stimuli-v-vehicle-comparisons"
@@ -4934,6 +6934,43 @@ DEG intersects</h4>
 <pre class="r"><code># This code shows ALL intersections in the upset plot
 p_upset</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-19-1.png" alt="" width="1920" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-1">
+Past versions of unnamed-chunk-19-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-19-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-19-1.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># This code shows only intersections with at least 10 overlapping DEGs
 minimum_upset &lt;- ComplexUpset::upset(
   upset_df,
@@ -4955,6 +6992,43 @@ minimum_upset &lt;- ComplexUpset::upset(
 
 minimum_upset</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-19-2.png" alt="" width="1920" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-2">
+Past versions of unnamed-chunk-19-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-19-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-19-2.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># This code shows only the top largest intersections, denoted &quot;n_intersections&quot;
 top_upset &lt;- ComplexUpset::upset(
   upset_df,
@@ -4977,6 +7051,43 @@ top_upset &lt;- ComplexUpset::upset(
 
 top_upset</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-19-3.png" alt="" width="1920" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-3">
+Past versions of unnamed-chunk-19-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-19-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-19-3.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="upset-plot-for-all-interaction-top-tables"
@@ -5071,6 +7182,43 @@ and the top 30 group DEG intersects</h4>
 <pre class="r"><code># This code shows ALL intersections in the interaction upset plot
 int_p_upset</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-22-1.png" alt="" width="1920" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-22-1">
+Past versions of unnamed-chunk-22-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-22-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-22-1.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># This code shows only intersections with at least 10 overlapping DEGs
 int_minimum_upset &lt;- ComplexUpset::upset(
   int_upset_df,
@@ -5092,6 +7240,43 @@ int_minimum_upset &lt;- ComplexUpset::upset(
 
 int_minimum_upset</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-22-2.png" alt="" width="1920" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-22-2">
+Past versions of unnamed-chunk-22-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-22-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-22-2.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># This code shows only the top largest intersections, denoted &quot;n_intersections&quot;
 int_top_upset &lt;- ComplexUpset::upset(
   int_upset_df,
@@ -5114,6 +7299,43 @@ int_top_upset &lt;- ComplexUpset::upset(
 
 int_top_upset</code></pre>
 <p><img src="figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-22-3.png" alt="" width="1920" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-22-3">
+Past versions of unnamed-chunk-22-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-22-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/959dff1268c0a9feb26bfaa5eb9392e52483119a/docs/figure/PHTO_DGE_Analysis.Rmd/unnamed-chunk-22-3.png" target="_blank">959dff1</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
