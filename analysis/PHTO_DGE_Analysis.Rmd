@@ -111,7 +111,9 @@ filtered_counts <- working_counts_file[rowMeans(log2cpm)> 0,]
 ```
 
 
-## Using model.matrix (~ Species * Stimulus), using Chimp and H2O as my primary references. DMSO will be used as the appropriate control for UPR and DDR stimuli, but will be constrasted against H2O to ensure the H2O control does not weigh into the analyses of UPR and DDR stimuli
+## Generating DGEs and applying constrast matrix
+
+Using model.matrix (~ Species * Stimulus), using Chimp and H2O as my primary references. DMSO will be used as the appropriate control for UPR and DDR stimuli, but will be constrasted against H2O to ensure the H2O control does not weigh into the analyses of UPR and DDR stimuli
 ```{r}
 filtered_counts <- filtered_counts[, working_metadata_file$Final_sample_name] # Run this to explicitly ensure sample ordering is identical between counts and metadata file
 
