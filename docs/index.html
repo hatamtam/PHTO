@@ -302,11 +302,11 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-09-25
+<strong>Last updated:</strong> 2026-10-14
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span> 0
 </p>
@@ -349,15 +349,99 @@ results.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtreea292405631d37f67c81787ddb8814be4916568ebtargetblanka292405a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20260812code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20260812)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20260812code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20260812)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree6eee21603570f0984303230c519dc10fe6f0e2fftargetblank6eee216a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/hatamtam/PHTO/tree/a292405631d37f67c81787ddb8814be4916568eb" target="_blank">a292405</a>
+<a href="https://github.com/hatamtam/PHTO/tree/6eee21603570f0984303230c519dc10fe6f0e2ff" target="_blank">6eee216</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtreea292405631d37f67c81787ddb8814be4916568ebtargetblanka292405a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomhatamtamPHTOtree6eee21603570f0984303230c519dc10fe6f0e2fftargetblank6eee216a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -367,7 +451,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/hatamtam/PHTO/tree/a292405631d37f67c81787ddb8814be4916568eb" target="_blank">a292405</a>.
+<a href="https://github.com/hatamtam/PHTO/tree/6eee21603570f0984303230c519dc10fe6f0e2ff" target="_blank">6eee216</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -384,19 +468,22 @@ were generated:
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
 
 Untracked files:
-    Untracked:  analysis/PHTO_DGE_Analysis.Rmd
+    Untracked:  analysis/PHTO_Cormotif_Analysis.Rmd
     Untracked:  data/Emma_counts_file.csv
     Untracked:  data/Emma_metadata_updated_all.RDS
     Untracked:  data/Ensembl_Entrez_Symbol_table.RDS
+    Untracked:  data/PHTO_cmf_fitmatrix_results.RDS
+    Untracked:  data/PHTO_expr_matrix_cmf.RDS
     Untracked:  data/PHTO_filtered_log2_cpm.RDS
     Untracked:  data/PHTO_lookup_table.RDS
+    Untracked:  data/PHTO_metadata_cmf.RDS
     Untracked:  data/PHTO_toptable_results.RDS
     Untracked:  data/dge_list.RDS
 
 Unstaged changes:
+    Modified:   analysis/PHTO_DGE_Analysis.Rmd
     Deleted:    analysis/first-analysis.Rmd
 
 </code></pre>
@@ -441,6 +528,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/hatamtam/PHTO/blob/6eee21603570f0984303230c519dc10fe6f0e2ff/analysis/index.Rmd" target="_blank">6eee216</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-10-14
+</td>
+<td>
+wflow_publish("analysis/index.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/hatamtam/PHTO/e7605b5ef7af3393d6d5e010dd9552d2e495c898/docs/index.html" target="_blank">e7605b5</a>
+</td>
+<td>
+Harsha Tamtam
+</td>
+<td>
+2026-09-25
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -592,6 +713,51 @@ href="https://hatamtam.github.io/PHTO/PHTO_RNAseq_Quality_analysis.html">PHTO
 RNA-seq analyses</a></p>
 <p><a href="https://hatamtam.github.io/PHTO/PHTO_DGE_Analysis.html">PHTO
 DGE analyses</a></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.6.1 (2026-06-24 ucrt)
+Platform: x86_64-w64-mingw32/x64
+Running under: Windows 11 x64 (build 26300)
+
+Matrix products: default
+  LAPACK version 3.12.1
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+time zone: America/Chicago
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] workflowr_1.7.2
+
+loaded via a namespace (and not attached):
+ [1] vctrs_0.7.3       httr_1.4.8        cli_3.6.6         knitr_1.51       
+ [5] rlang_1.2.0       xfun_0.57         stringi_1.8.7     otel_0.2.0       
+ [9] processx_3.9.0    promises_1.5.0    jsonlite_2.0.0    glue_1.8.1       
+[13] rprojroot_2.1.1   git2r_0.36.2      htmltools_0.5.9   httpuv_1.6.17    
+[17] sass_0.4.10       rmarkdown_2.31    jquerylib_0.1.4   tibble_3.3.1     
+[21] evaluate_1.0.5    fastmap_1.2.0     yaml_2.3.12       lifecycle_1.0.5  
+[25] whisker_0.4.1     stringr_1.6.0     compiler_4.6.1    fs_2.1.0         
+[29] pkgconfig_2.0.3   Rcpp_1.1.1-1.1    rstudioapi_0.19.0 later_1.4.8      
+[33] digest_0.6.39     R6_2.6.1          pillar_1.11.1     callr_3.8.0      
+[37] magrittr_2.0.5    bslib_0.11.0      tools_4.6.1       cachem_1.1.0     
+[41] getPass_0.2-4    </code></pre>
+</div>
 </div>
 </div>
 </div>
